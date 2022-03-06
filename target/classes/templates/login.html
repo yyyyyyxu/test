@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="referrer" content="no-referrer" />
+    <title>Login</title>
+</head>
+<body>
+<div id="login">
+    <h1>Login</h1>
+    <form method="post" th:action="@{/user/login}">
+        <input type="text" required="required" placeholder="用户名" name="username"></input>
+        <input type="password" required="required" placeholder="密码" name="password"></input>
+        <input type="checkbox" name="remember-me">记住我</input>
+        <button class="but" type="submit" value="login">登录</button>
+    </form>
+</div>
+<!--<form th:action="@{/book/login}" method="post">-->
+<!--    用戶名：<input type="text" name="username"/>-->
+<!--    <br>-->
+<!--    密碼: <input type="text" name="password">-->
+<!--    <br>-->
+<!--    <input type="checkbox" name="remember-me">自動登錄-->
+<!--    <input type="submit" value="login">-->
+<!--</form>-->
+</body>
+</html>

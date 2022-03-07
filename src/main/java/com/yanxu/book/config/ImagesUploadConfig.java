@@ -10,6 +10,7 @@ public class ImagesUploadConfig implements WebMvcConfigurer {
      * 这是因为对服务器的保护措施导致的，服务器不能对外部暴露真实的资源路径，需要配置虚拟路径映射访问。
      */
 
+    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         //获取文件的真实路径
         String path = System.getProperty("user.dir")+"\\src\\main\\resources\\static\\bookpic\\";

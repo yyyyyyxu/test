@@ -30,6 +30,7 @@ public class DaoAuthenticationProvider extends AbstractUserDetailsAuthentication
     private UserDetailsPasswordService userDetailsPasswordService;
 
 
+    @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
         if (authentication.getCredentials() == null) {
             this.logger.debug("Authentication failed: no credentials provided");
@@ -51,10 +52,12 @@ public class DaoAuthenticationProvider extends AbstractUserDetailsAuthentication
         }
     }
 
+    @Override
     protected void doAfterPropertiesSet() {
         Assert.notNull(this.userDetailsService, "A UserDetailsService must be set");
     }
 
+    @Override
     protected final UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
         this.prepareTimingAttackProtection();
 
@@ -75,6 +78,7 @@ public class DaoAuthenticationProvider extends AbstractUserDetailsAuthentication
         }
     }
 
+    @Override
     protected Authentication createSuccessAuthentication(Object principal, Authentication authentication, UserDetails user) {
         boolean upgradeEncoding = this.userDetailsPasswordService != null && this.passwordEncoder.upgradeEncoding(user.getPassword());
         if (upgradeEncoding) {

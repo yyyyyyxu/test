@@ -24,6 +24,7 @@ public class MyUsernamePasswordAuthenticationFilter extends AbstractAuthenticati
         super(new AntPathRequestMatcher("user/login", "GET"));
     }
 
+    @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         if (this.postOnly && !request.getMethod().equals("GET")) {
             throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());

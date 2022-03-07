@@ -24,6 +24,12 @@ public class User implements Serializable {
     @TableField("role")
     private String role;
 
+    @TableField("number_borrow")
+    private String numberOfBorrow;
+
+    @TableField("maxnumber_borrow")
+    private String maxNumberOfBorrow;
+
     @TableField("fault_time")
     private int faultTime;
 

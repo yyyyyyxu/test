@@ -30,7 +30,7 @@ public class JsonLoginSuccessHandler implements AuthenticationSuccessHandler {
         String path = request.getContextPath();
         String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
         if (roles.contains("ROLE_manager")) {
-            response.sendRedirect(basePath + "manager/login");
+            response.sendRedirect(basePath + "manager/login?name="+authentication.getPrincipal());
             return;
         }
         response.sendRedirect(basePath + "book/getBookList");

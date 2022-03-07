@@ -39,10 +39,10 @@ public class BookBorrowHistorySearchController {
     }
 
     @RequestMapping("selfHistory")
-    public String selfHistory(@RequestParam(required = false, defaultValue = "1") String num, Model model) {
+    public String selfHistory(@RequestParam(required = false, defaultValue = "1") String num,@RequestParam(value = "name") String name, Model model) {
         int pageNum = Integer.parseInt(num);
         BookBorrowHistory bookBorrowHistory = new BookBorrowHistory();
-        bookBorrowHistory.setUserName(LoginInAspect.name);
+        bookBorrowHistory.setUserName(name);
         pageParam.setPageNum(pageNum);
         pageParam.setParam(bookBorrowHistory);
         PageInfo<BookBorrowHistory> pageInfo = bookBorrowHistoryService.page(pageParam);

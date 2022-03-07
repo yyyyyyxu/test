@@ -11,4 +11,5 @@ public class ManagerLoginController {
     public String managerLogin(){
         return "manager";
     }
+
 }

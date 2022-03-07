@@ -27,6 +27,7 @@ public class BookSearchServiceImp extends ServiceImpl<BaseMapper<Book>, Book> im
     private BookMapper bookMapper;
 
 
+    @Override
     public List list(Book book) {
         BufferedOutputStream bufferedOutputStream = null;
 

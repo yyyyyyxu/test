@@ -21,6 +21,8 @@ public class LoginInAspect {
     @Autowired
     UserLoginHistoryMapper userLoginHistoryMapper;
 
+    public static String name;
+
     @Autowired
     UserMapper userMapper;
 
@@ -37,5 +39,6 @@ public class LoginInAspect {
         userMapper.update(user,new UpdateWrapper<User>().lambda().eq(User::getUserName,(String) authenticationTokens.getPrincipal()));
         userLoginHistory.setUserName((String) authenticationTokens.getPrincipal());
         userLoginHistoryMapper.insert(userLoginHistory);
+        name=(String) authenticationTokens.getPrincipal();
     }
 }

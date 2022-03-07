@@ -25,7 +25,7 @@ public class BookBorrowHistory implements Serializable {
  /**
   * 借阅类型
   */
- @TableField("borrowing_type")
+    @TableField("borrowing_type")
     private String borrowingType;
 
     @TableField(value = "creat_time", fill = FieldFill.INSERT)

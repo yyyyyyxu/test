@@ -14,7 +14,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BorrowHistory implements Serializable {
+public class BookBorrowHistory implements Serializable {
    private static final long serialVersionUID = 1L;
 
     @TableId(value = "ID", type = IdType.ASSIGN_UUID)

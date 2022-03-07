@@ -3,18 +3,18 @@ package com.yanxu.book.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yanxu.book.entity.BorrowHistory;
-import com.yanxu.book.mapper.BorrowHistoryMapper;
+import com.yanxu.book.entity.BookBorrowHistory;
+import com.yanxu.book.mapper.BookBorrowHistoryMapper;
 import com.yanxu.book.service.BookBorrowHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-public class BookBorrowHistoryServiceImp extends ServiceImpl<BaseMapper<BorrowHistory>, BorrowHistory> implements BookBorrowHistoryService {
+public class BookBorrowHistoryServiceImp extends ServiceImpl<BaseMapper<BookBorrowHistory>, BookBorrowHistory> implements BookBorrowHistoryService {
 
     @Autowired
-    BorrowHistoryMapper borrowHistoryMapper;
+    BookBorrowHistoryMapper bookBorrowHistoryMapper;
 
     /**
      * create by: yanxu
@@ -24,10 +24,10 @@ public class BookBorrowHistoryServiceImp extends ServiceImpl<BaseMapper<BorrowHi
      * @return BorrowHistory
      */
     @Override
-    public List<BorrowHistory> list(BorrowHistory borrowHistory) {
-        List<BorrowHistory> borrowHistories=borrowHistoryMapper.selectList(new QueryWrapper<BorrowHistory>().lambda().eq(!StringUtils.isEmpty(borrowHistory.getUserName()),BorrowHistory::getUserName,borrowHistory.getUserName())
-                .eq(!StringUtils.isEmpty(borrowHistory.getBorrowingType()),BorrowHistory::getBorrowingType,borrowHistory.getBorrowingType())
-                .eq(!StringUtils.isEmpty(borrowHistory.getCreatTime()),BorrowHistory::getCreatTime,borrowHistory.getCreatTime()));
+    public List<BookBorrowHistory> list(BookBorrowHistory bookBorrowHistory) {
+        List<BookBorrowHistory> borrowHistories= bookBorrowHistoryMapper.selectList(new QueryWrapper<BookBorrowHistory>().lambda().eq(!StringUtils.isEmpty(bookBorrowHistory.getUserName()), BookBorrowHistory::getUserName, bookBorrowHistory.getUserName())
+                .eq(!StringUtils.isEmpty(bookBorrowHistory.getBorrowingType()), BookBorrowHistory::getBorrowingType, bookBorrowHistory.getBorrowingType())
+                .eq(!StringUtils.isEmpty(bookBorrowHistory.getCreatTime()), BookBorrowHistory::getCreatTime, bookBorrowHistory.getCreatTime()));
         return borrowHistories;
     }
 }

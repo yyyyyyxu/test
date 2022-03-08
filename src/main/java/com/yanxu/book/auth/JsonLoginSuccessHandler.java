@@ -1,5 +1,6 @@
 package com.yanxu.book.auth;
 
+import com.yanxu.book.entity.User;
 import com.yanxu.book.service.impl.UserLoginServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -31,13 +32,16 @@ public class JsonLoginSuccessHandler implements AuthenticationSuccessHandler {
         String path = request.getContextPath();
         String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
         if (roles.contains("ROLE_manager")) {
-            response.sendRedirect(basePath + "manager/login");
+            response.sendRedirect(basePath + "book/getBookList");
             return;
         }
         String s=authentication.getPrincipal().toString();
         String[] strings=s.split(";");
         String[] userName=strings[0].split(":");
-        response.sendRedirect(basePath + "book/getBookList?name="+userName[2].trim());
+        User user=new User();
+        user.setUserName(userName[2].trim());
+        request.getSession().setAttribute("user",user);
+        response.sendRedirect(basePath + "book/getBookList");
     }
 }
 

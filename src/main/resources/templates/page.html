@@ -9,12 +9,6 @@
 <div align="middle" >
     <a th:href="@{/getBookBorrowHistory/selfHistory}">hh</a>
     <a th:href="@{/book/logout}">退出</a>
-    <form method=post th:action="@{/book/uploadLog}" enctype="multipart/form-data">
-        文件：<input type="file" name="uploadLog"/>
-        书籍号：<input type="text" name="Code"><input type="submit"/>
-        <span th:text="${mag}"></span>
-    </form>
-
 
     <table border="1">
 

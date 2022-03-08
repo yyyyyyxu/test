@@ -3,6 +3,7 @@ package com.yanxu.book.controller;
 import com.github.pagehelper.PageInfo;
 import com.yanxu.book.aspect.LoginInAspect;
 import com.yanxu.book.entity.BookBorrowHistory;
+import com.yanxu.book.entity.User;
 import com.yanxu.book.mapper.BookBorrowHistoryMapper;
 import com.yanxu.book.service.BookBorrowHistoryService;
 import com.yanxu.book.util.PageParam;
@@ -58,8 +59,8 @@ public class BookBorrowHistorySearchController {
     public String selfHistory(@RequestParam(required = false, defaultValue = "1") String num, Model model, HttpServletRequest request) {
         int pageNum = Integer.parseInt(num);
         BookBorrowHistory bookBorrowHistory = new BookBorrowHistory();
-        String name=(String) request.getSession().getAttribute("name");
-        bookBorrowHistory.setUserName(name);
+        User user=(User) request.getSession().getAttribute("user");
+        bookBorrowHistory.setUserName(user.getUserName());
         pageParam.setPageNum(pageNum);
         pageParam.setParam(bookBorrowHistory);
         PageInfo<BookBorrowHistory> pageInfo = bookBorrowHistoryService.page(pageParam);

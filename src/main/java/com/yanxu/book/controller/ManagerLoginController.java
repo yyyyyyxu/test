@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ManagerLoginController {
 
     @RequestMapping("login")
-    public String managerLogin(@RequestParam(value = "name",required = false) String name,Model model){
-        model.addAttribute("name",name);
-        return "manager";
+    public String managerLogin(){
+
+        return "managerLogin";
     }
 
 }

@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @RequestMapping("getBookBorrowHistory")
 public class BookBorrowHistorySearchController {
@@ -25,28 +27,43 @@ public class BookBorrowHistorySearchController {
     @Autowired
     private BookBorrowHistoryMapper borrowHistoryMapper;
 
-
+    /**
+     * create by: yanxu
+     * description: TODO
+     * create time: 2022/3/8 11:13
+     * @Param: null
+     * @return
+     */
     @RequestMapping("allHistory")
-    public String allHistory(@RequestParam(required = false, defaultValue = "1") String num, @RequestParam(value = "username", required = false) String userName, Model model) {
+    public String allHistory(@RequestParam(required = false, defaultValue = "1") String num, @RequestParam(value = "username", required = false) String userName,@RequestParam(value = "bookname", required = false) String bookname, Model model) {
         int pageNum = Integer.parseInt(num);
         BookBorrowHistory bookBorrowHistory = new BookBorrowHistory();
         bookBorrowHistory.setUserName(userName);
+        bookBorrowHistory.setBorrowingBookname(bookname);
         pageParam.setPageNum(pageNum);
         pageParam.setParam(bookBorrowHistory);
         PageInfo<BookBorrowHistory> pageInfo = bookBorrowHistoryService.page(pageParam);
         model.addAttribute("page", pageInfo);
-        return "page";
+        return "allHistory";
     }
 
+    /**
+     * create by: yanxu
+     * description: TODO
+     * create time: 2022/3/8 11:12
+     * @Param:num,model,request
+     * @return
+     */
     @RequestMapping("selfHistory")
-    public String selfHistory(@RequestParam(required = false, defaultValue = "1") String num,@RequestParam(value = "name") String name, Model model) {
+    public String selfHistory(@RequestParam(required = false, defaultValue = "1") String num, Model model, HttpServletRequest request) {
         int pageNum = Integer.parseInt(num);
         BookBorrowHistory bookBorrowHistory = new BookBorrowHistory();
+        String name=(String) request.getSession().getAttribute("name");
         bookBorrowHistory.setUserName(name);
         pageParam.setPageNum(pageNum);
         pageParam.setParam(bookBorrowHistory);
         PageInfo<BookBorrowHistory> pageInfo = bookBorrowHistoryService.page(pageParam);
         model.addAttribute("page", pageInfo);
-        return "page";
+        return "selfHistory";
     }
 }

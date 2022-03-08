@@ -1,12 +1,11 @@
 package com.yanxu.book.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,6 +13,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@TableName("bookborrow_history")
 public class BookBorrowHistory implements Serializable {
    private static final long serialVersionUID = 1L;
 
@@ -25,9 +25,11 @@ public class BookBorrowHistory implements Serializable {
  /**
   * 借阅类型
   */
-    @TableField("borrowing_type")
-    private String borrowingType;
+    @TableField("borrowing_bookname")
+    private String borrowingBookname;
+
 
     @TableField(value = "creat_time", fill = FieldFill.INSERT)
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date creatTime;
 }

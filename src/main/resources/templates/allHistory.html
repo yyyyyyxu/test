@@ -1,0 +1,56 @@
+<html lang="en"  xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="referrer" content="no-referrer" />
+</head>
+
+<body >
+
+<div align="middle" >
+
+    <a th:href="@{/book/logout}">退出</a>
+
+
+    <table border="1">
+
+
+        <form method=get th:action="@{/getBookBorrowHistory/allHistory}">
+            借阅者姓名: <input type="text" name="username"/>
+            图书名称: <input type="text" name="bookname">
+            <button type="submit" class="button">查询</button>
+        </form>
+
+        <thead>
+        <tr>
+            <th>借阅人</th>
+            <th>图书名称</th>
+            <th>借阅时间</th>
+        </tr>
+        </thead>
+
+        <tbody align="middle">
+        <tr th:each="bookBorrowHistory : ${page.list}">
+            <td th:text="${bookBorrowHistory.userName}"></td>
+            <td th:text="${bookBorrowHistory.borrowingBookname}"></td>
+            <td th:text="${#dates.format(bookBorrowHistory.creatTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+        </tr>
+        <td colspan="9">
+            共<span th:text="${page.pages}"/>页，<span th:text="${page.total }"/>条记录
+            <a th:href="@{/getBookBorrowHistory/selfHistory?(num=1)}">首页</a>
+            <a th:if="${page.pageNum}!=1" th:href="@{/getBookBorrowHistory/selfHistory?(num=${page.pageNum}-1)}">上一页</a>
+            <a th:if="${page.pageNum}==1" th:href="@{/getBookBorrowHistory/selfHistory?num=1}">上一页</a>
+            <a th:if="${page.pageNum}!=${page.pages}" th:href="@{/getBookBorrowHistory/selfHistory?(num=${page.pageNum}+1)}">下一页</a>
+            第<span th:text="${page.pageNum }"/>页
+            <a th:if="${page.pageNum}==${page.pages}" th:href="@{/getBookBorrowHistory/selfHistory?(num=${page.pages})}">下一页</a>
+            <a th:href="@{/getBookBorrowHistory/selfHistory?(num=${page.pages})}">尾页</a>
+        </td>
+
+        </tbody>
+
+    </table>
+</div>
+
+
+</body>
+
+</html>

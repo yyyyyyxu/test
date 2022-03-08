@@ -49,7 +49,7 @@ public class BookSearchController {
 
 
     @RequestMapping("getBookList")
-    public String getBookList(@RequestParam(required = false, defaultValue = "1") String num, String bookName, String bookCode, Model model) {
+    public String getBookList(@RequestParam(required = false,value = "name") String name,@RequestParam(required = false, defaultValue = "1") String num, String bookName, String bookCode, Model model,HttpServletRequest request) {
         int pageNum = Integer.parseInt(num);
         Book book = new Book();
         book.setBookCode(bookCode);
@@ -58,6 +58,7 @@ public class BookSearchController {
         pageParam.setParam(book);
         PageInfo<Book> pageInfo = bookSearchService.page(pageParam);
         model.addAttribute("page", pageInfo);
+        request.getSession().setAttribute("name",name);
         return "page";
     }
 

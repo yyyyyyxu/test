@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.Set;
 
 public class JsonLoginSuccessHandler implements AuthenticationSuccessHandler {
@@ -30,10 +31,13 @@ public class JsonLoginSuccessHandler implements AuthenticationSuccessHandler {
         String path = request.getContextPath();
         String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
         if (roles.contains("ROLE_manager")) {
-            response.sendRedirect(basePath + "manager/login?name="+authentication.getPrincipal());
+            response.sendRedirect(basePath + "manager/login");
             return;
         }
-        response.sendRedirect(basePath + "book/getBookList");
+        String s=authentication.getPrincipal().toString();
+        String[] strings=s.split(";");
+        String[] userName=strings[0].split(":");
+        response.sendRedirect(basePath + "book/getBookList?name="+userName[2].trim());
     }
 }
 

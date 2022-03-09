@@ -12,19 +12,15 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     //使用mp进行添加操作这个方法执行
     @Override
     public void insertFill(MetaObject metaObject) {
-        Calendar calendar=Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.add(Calendar.HOUR,+8);
-        this.setFieldValByName("creatTime",calendar.getTime(),metaObject);
-        this.setFieldValByName("updateTime",calendar.getTime(),metaObject);
+
+        this.setFieldValByName("creatTime",new Date(),metaObject);
+        this.setFieldValByName("updateTime",new Date(),metaObject);
     }
 
     //使用mp进行修改操作这个方法执行
     @Override
     public void updateFill(MetaObject metaObject) {
-        Calendar calendar=Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.add(Calendar.HOUR,+8);
-        this.setFieldValByName("updateTime",calendar.getTime(),metaObject);
+
+        this.setFieldValByName("updateTime",new Date(),metaObject);
     }
 }

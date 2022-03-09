@@ -30,6 +30,5 @@ public class BookBorrowHistory implements Serializable {
 
 
     @TableField(value = "creat_time", fill = FieldFill.INSERT)
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date creatTime;
 }

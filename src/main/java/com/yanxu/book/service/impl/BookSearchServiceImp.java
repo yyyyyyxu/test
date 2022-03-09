@@ -33,7 +33,7 @@ public class BookSearchServiceImp extends ServiceImpl<BaseMapper<Book>, Book> im
 
         List<Book> allBook;
         allBook = bookMapper.selectList(new QueryWrapper<Book>().lambda().eq(!StringUtils.isEmpty(book.getBookCode()), Book::getBookCode, book.getBookCode())
-                .eq(!StringUtils.isEmpty(book.getBookName()), Book::getBookName, book.bookName));
+                .eq(!StringUtils.isEmpty(book.getBookName()), Book::getBookName, book.getBookName()));
         for (Book book1 : allBook) {
             if (book1.getImage() != null) {
                 try {

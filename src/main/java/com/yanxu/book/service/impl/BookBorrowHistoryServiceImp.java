@@ -38,20 +38,6 @@ public class BookBorrowHistoryServiceImp extends ServiceImpl<BaseMapper<BookBorr
         List<BookBorrowHistory> borrowHistories= bookBorrowHistoryMapper.selectList(new QueryWrapper<BookBorrowHistory>().lambda().eq(!StringUtils.isEmpty(bookBorrowHistory.getUserName()), BookBorrowHistory::getUserName, bookBorrowHistory.getUserName())
                 .eq(!StringUtils.isEmpty(bookBorrowHistory.getBorrowingBookname()), BookBorrowHistory::getBorrowingBookname, bookBorrowHistory.getBorrowingBookname())
                 .eq(!StringUtils.isEmpty(bookBorrowHistory.getCreatTime()), BookBorrowHistory::getCreatTime, bookBorrowHistory.getCreatTime()));
-       for (BookBorrowHistory c:borrowHistories){
-            Calendar calendar=Calendar.getInstance();
-            calendar.setTime(c.getCreatTime());
-            calendar.add(Calendar.HOUR,-8);
-            DateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String dateString=simpleDateFormat.format(calendar.getTime());
-           try {
-               Date date=simpleDateFormat.parse(dateString);
-               c.setCreatTime(date);
-           } catch (ParseException e) {
-               e.printStackTrace();
-           }
-
-       }
         return borrowHistories;
     }
 }

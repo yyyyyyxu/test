@@ -25,13 +25,13 @@ public class UserLoginServiceImp extends ServiceImpl<BaseMapper<User>, User> imp
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        User user = userMapper.selectOne(new QueryWrapper<User>().lambda().eq(User::getUserName, userName));
+        User user = userMapper.selectOne(new QueryWrapper<User>().lambda().eq(User::getUserId, userName));
         if (user == null) {
             throw new UsernameNotFoundException("不存在该用户");
         }
         List<GrantedAuthority> authorityList = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_"+user.getRole());
 
-        return new org.springframework.security.core.userdetails.User(user.getUserName(),
+        return new org.springframework.security.core.userdetails.User(user.getUserId(),
                 new BCryptPasswordEncoder().encode(user.getPassWord()), authorityList);
 
     }

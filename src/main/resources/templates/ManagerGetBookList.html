@@ -17,17 +17,11 @@
     <table border="1">
 
 
-        <form method=get th:action="@{/book/getBookList}">
-            图书编码: <input type="text" name="bookCode"/>
-            图书名称: <input type="text" name="bookName">
-            <button type="submit" class="button">查询</button>
-        </form>
 
         <thead>
         <tr>
             <th>图书编码</th>
             <th>图书名称</th>
-            <th>被借阅状态</th>
             <th>图片</th>
             <th>详情</th>
         </tr>
@@ -37,8 +31,6 @@
         <tr th:each="book : ${page.list}">
             <td th:text="${book.bookCode}"></td>
             <td th:text="${book.bookName}"></td>
-            <td th:if="${book.flag}eq '0'" th:text="否"></td>
-            <td th:if="${book.flag}eq '1'" th:text="是"></td>
             <td>
                 <img th:src="@{'/bookpic/'+${book.bookCode}+'.png'}" height="250" width="250">
             </td>
@@ -49,12 +41,12 @@
         <td colspan="9">
             共<span th:text="${page.pages}"/>页，<span th:text="${page.total }"/>条记录
             <a th:href="@{/book/getBookList?(num=1)}">首页</a>
-            <a th:if="${page.pageNum}!=1" th:href="@{/book/getBookList?(num=${page.pageNum}-1)}">上一页</a>
-            <a th:if="${page.pageNum}==1" th:href="@{/book/getBookList?num=1}">上一页</a>
-            <a th:if="${page.pageNum}!=${page.pages}" th:href="@{/book/getBookList?(num=${page.pageNum}+1)}">下一页</a>
+            <a th:if="${page.pageNum}!=1" th:href="@{/book/managerGetBookList?(num=${page.pageNum}-1)}">上一页</a>
+            <a th:if="${page.pageNum}==1" th:href="@{/book/managerGetBookList?num=1}">上一页</a>
+            <a th:if="${page.pageNum}!=${page.pages}" th:href="@{/book/managerGetBookList?(num=${page.pageNum}+1)}">下一页</a>
             第<span th:text="${page.pageNum }"/>页
-            <a th:if="${page.pageNum}==${page.pages}" th:href="@{/book/getBookList?(num=${page.pages})}">下一页</a>
-            <a th:href="@{/book/getBookList?(num=${page.pages})}">尾页</a>
+            <a th:if="${page.pageNum}==${page.pages}" th:href="@{/book/managerGetBookList?(num=${page.pages})}">下一页</a>
+            <a th:href="@{/book/managerGetBookList?(num=${page.pages})}">尾页</a>
         </td>
         </tbody>
 

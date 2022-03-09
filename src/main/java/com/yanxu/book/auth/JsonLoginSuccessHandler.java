@@ -32,16 +32,22 @@ public class JsonLoginSuccessHandler implements AuthenticationSuccessHandler {
         String path = request.getContextPath();
         String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
         if (roles.contains("ROLE_manager")) {
-            response.sendRedirect(basePath + "book/getBookList");
+            response.sendRedirect(basePath + "book/managerGetBookList");
+            String s=authentication.getPrincipal().toString();
+            String[] strings=s.split(";");
+            String[] userName=strings[0].split(":");
+            User user=new User();
+            user.setUserId(userName[2].trim());
+            request.getSession().setAttribute("user",user);
             return;
         }
         String s=authentication.getPrincipal().toString();
         String[] strings=s.split(";");
         String[] userName=strings[0].split(":");
         User user=new User();
-        user.setUserName(userName[2].trim());
+        user.setUserId(userName[2].trim());
         request.getSession().setAttribute("user",user);
-        response.sendRedirect(basePath + "book/getBookList");
+        response.sendRedirect(basePath + "book/userGetBookList");
     }
 }
 

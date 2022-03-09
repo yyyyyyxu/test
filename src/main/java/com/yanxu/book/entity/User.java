@@ -15,8 +15,8 @@ public class User implements Serializable {
     @TableId(value = "ID", type = IdType.ASSIGN_UUID)
     private String id;
 
-    @TableField("user_name")
-    private String userName;
+    @TableField("user_id")
+    private String userId;
 
     @TableField("pass_word")
     private String passWord;
@@ -25,10 +25,10 @@ public class User implements Serializable {
     private String role;
 
     @TableField("number_borrow")
-    private String numberOfBorrow;
+    private int numberOfBorrow;
 
     @TableField("maxnumber_borrow")
-    private String maxNumberOfBorrow;
+    private int maxNumberOfBorrow;
 
     @TableField("fault_time")
     private int faultTime;

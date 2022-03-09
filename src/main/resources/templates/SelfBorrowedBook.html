@@ -1,19 +1,17 @@
-<html lang="en"  xmlns:th="http://www.thymeleaf.org" >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="referrer" content="no-referrer" />
+    <meta name="referrer" content="no-referrer"/>
 </head>
-
-<body >
-
+<body>
 <div align="middle" >
-    <a th:href="@{/getBookBorrowHistory/selfHistory}">hh</a>
+    <a th:href="@{/getBookBorrowHistory/selfHistory}">借阅记录查询</a>
     <a th:href="@{/book/logout}">退出</a>
 
     <table border="1">
 
 
-        <form method=get th:action="@{/book/getBookList}">
+        <form method=get th:action="@{/book/userGetBookList}">
             图书编码: <input type="text" name="bookCode"/>
             图书名称: <input type="text" name="bookName">
             <button type="submit" class="button">查询</button>
@@ -45,19 +43,16 @@
         <td colspan="9">
             共<span th:text="${page.pages}"/>页，<span th:text="${page.total }"/>条记录
             <a th:href="@{/book/getBookList?(num=1)}">首页</a>
-            <a th:if="${page.pageNum}!=1" th:href="@{/book/getBookList?(num=${page.pageNum}-1)}">上一页</a>
-            <a th:if="${page.pageNum}==1" th:href="@{/book/getBookList?num=1}">上一页</a>
-            <a th:if="${page.pageNum}!=${page.pages}" th:href="@{/book/getBookList?(num=${page.pageNum}+1)}">下一页</a>
+            <a th:if="${page.pageNum}!=1" th:href="@{/book/userGetBookList?(num=${page.pageNum}-1)}">上一页</a>
+            <a th:if="${page.pageNum}==1" th:href="@{/book/userGetBookList?num=1}">上一页</a>
+            <a th:if="${page.pageNum}!=${page.pages}" th:href="@{/book/userGetBookList?(num=${page.pageNum}+1)}">下一页</a>
             第<span th:text="${page.pageNum }"/>页
-            <a th:if="${page.pageNum}==${page.pages}" th:href="@{/book/getBookList?(num=${page.pages})}">下一页</a>
-            <a th:href="@{/book/getBookList?(num=${page.pages})}">尾页</a>
+            <a th:if="${page.pageNum}==${page.pages}" th:href="@{/book/userGetBookList?(num=${page.pages})}">下一页</a>
+            <a th:href="@{/book/userGetBookList?(num=${page.pages})}">尾页</a>
         </td>
         </tbody>
 
     </table>
 </div>
-
-
 </body>
-
 </html>

@@ -17,26 +17,29 @@ public class Book implements Serializable {
     private static final long serialVersionUID = -745198244513964252L;
 
     @TableId(value = "ID", type = IdType.ASSIGN_UUID)
-     public String id;
+    private String id;
 
     @TableField("book_code")
-    public String bookCode;
+    private String bookCode;
 
     @TableField("book_name")
-    public String bookName;
+    private String bookName;
 
     @TableField("user_id")
-    public String userId;
+    private String userId;
 
     //0-没人借阅 1-有人借阅
-    public String flag;
+    private String flag;
+
+    @TableField("book_detail")
+    private String bookDetail;
 
     @TableField(value = "creat_time" ,fill = FieldFill.INSERT)
-    public Date creatTime;
+    private Date creatTime;
 
         @TableField(value = "update_time",fill = FieldFill.INSERT_UPDATE)
-    public Date updateTime;
+    private Date updateTime;
 
-    public byte[] image;
+    private byte[] image;
 
 }

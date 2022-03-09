@@ -60,7 +60,7 @@ public class BookBorrowHistorySearchController {
         int pageNum = Integer.parseInt(num);
         BookBorrowHistory bookBorrowHistory = new BookBorrowHistory();
         User user=(User) request.getSession().getAttribute("user");
-        bookBorrowHistory.setUserName(user.getUserName());
+        bookBorrowHistory.setUserName(user.getUserId());
         pageParam.setPageNum(pageNum);
         pageParam.setParam(bookBorrowHistory);
         PageInfo<BookBorrowHistory> pageInfo = bookBorrowHistoryService.page(pageParam);

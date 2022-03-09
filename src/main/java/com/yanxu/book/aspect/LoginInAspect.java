@@ -34,9 +34,9 @@ public class LoginInAspect {
         Object[] authenticationTokenClass = joinPoint.getArgs();
         UsernamePasswordAuthenticationToken authenticationTokens = (UsernamePasswordAuthenticationToken) authenticationTokenClass[0];
         UserLoginHistory userLoginHistory = new UserLoginHistory();
-        User user = userMapper.selectOne(new QueryWrapper<User>().lambda().eq(User::getUserName,(String) authenticationTokens.getPrincipal()));
+        User user = userMapper.selectOne(new QueryWrapper<User>().lambda().eq(User::getUserId,(String) authenticationTokens.getPrincipal()));
         user.setFaultTime(user.getFaultTime()+1);
-        userMapper.update(user,new UpdateWrapper<User>().lambda().eq(User::getUserName,(String) authenticationTokens.getPrincipal()));
+        userMapper.update(user,new UpdateWrapper<User>().lambda().eq(User::getUserId,(String) authenticationTokens.getPrincipal()));
         userLoginHistory.setUserName((String) authenticationTokens.getPrincipal());
         userLoginHistoryMapper.insert(userLoginHistory);
     }

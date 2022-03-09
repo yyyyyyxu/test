@@ -1,0 +1,36 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="referrer" content="no-referrer"/>
+</head>
+<body>
+<div align="middle">
+    <table border="1">
+
+
+        <thead>
+        <tr>
+            <th>图书名称</th>
+            <th>详情</th>
+        </tr>
+        </thead>
+
+        <tbody align="middle">
+
+            <td th:text="${bookName}"></td>
+            <td th:text="${bookDetail}"></td>
+            <td th:if="${bookFlag}eq '0'">
+                <a th:href="@{/book/borrowBook?(bookCode=${bookCode})}">借阅</a>
+            </td>
+            <td>
+                <img th:src="@{'/bookpic/'+${bookCode}+'.png'}" height="250" width="250">
+            </td>
+
+        </tbody>
+
+    </table>
+
+
+</div>
+</body>
+</html>

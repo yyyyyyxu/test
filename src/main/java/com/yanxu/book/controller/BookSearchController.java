@@ -4,20 +4,20 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.github.pagehelper.PageInfo;
 import com.yanxu.book.entity.Book;
+import com.yanxu.book.entity.User;
 import com.yanxu.book.mapper.BookMapper;
 import com.yanxu.book.service.BookInsertService;
 import com.yanxu.book.service.BookSearchService;
+import com.yanxu.book.service.BorrowBookService;
+import com.yanxu.book.service.HadToBorrowBooksService;
 import com.yanxu.book.util.PageParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -38,7 +38,16 @@ public class BookSearchController {
     private BookMapper bookMapper;
 
     @Autowired
-    private PageParam<Book> pageParam;
+    private PageParam<Book> pageParamBook;
+
+    @Autowired
+    private PageParam<User> pageParamUser;
+
+    @Autowired
+    private BorrowBookService borrowBookService;
+
+    @Autowired
+    HadToBorrowBooksService hadToBorrowBooksService;
 
 
     @RequestMapping("insertBook")
@@ -48,19 +57,34 @@ public class BookSearchController {
     }
 
 
-    @RequestMapping("getBookList")
-    public String getBookList(@RequestParam(required = false,value = "name") String name,@RequestParam(required = false, defaultValue = "1") String num, String bookName, String bookCode, Model model,HttpServletRequest request) {
+    @RequestMapping("userGetBookList")
+    public String userGetBookList(@RequestParam(required = false,value = "name") String name,@RequestParam(required = false, defaultValue = "1") String num, String bookName, String bookCode, Model model,HttpServletRequest request) {
         int pageNum = Integer.parseInt(num);
         Book book = new Book();
         book.setBookCode(bookCode);
         book.setBookName(bookName);
-        pageParam.setPageNum(pageNum);
-        pageParam.setParam(book);
-        PageInfo<Book> pageInfo = bookSearchService.page(pageParam);
+        pageParamBook.setPageNum(pageNum);
+        pageParamBook.setParam(book);
+        PageInfo<Book> pageInfo = bookSearchService.page(pageParamBook);
         model.addAttribute("page", pageInfo);
         request.getSession().setAttribute("name",name);
-        return "page";
+        return "UserGetBookList";
     }
+
+    @RequestMapping("managerGetBookList")
+    public String managerGetBookList(@RequestParam(required = false,value = "name") String name,@RequestParam(required = false, defaultValue = "1") String num, String bookName, String bookCode, Model model,HttpServletRequest request) {
+        int pageNum = Integer.parseInt(num);
+        Book book = new Book();
+        book.setBookCode(bookCode);
+        book.setBookName(bookName);
+        pageParamBook.setPageNum(pageNum);
+        pageParamBook.setParam(book);
+        PageInfo<Book> pageInfo = bookSearchService.page(pageParamBook);
+        model.addAttribute("page", pageInfo);
+        request.getSession().setAttribute("name",name);
+        return "ManagerGetBookList";
+    }
+
 
     @PostMapping("uploadLog")
     public String uploadLog(@RequestParam("uploadLog") MultipartFile file, @RequestParam(value = "Code",required = false) String code,Model model) {
@@ -97,10 +121,37 @@ public class BookSearchController {
     }
 
     @GetMapping("bookDetails")
-    @ResponseBody
-    public String bookDetails(String bookCode){
+    public String bookDetails(String bookCode,Model model){
         Book book = bookMapper.selectOne(new QueryWrapper<Book>().lambda().eq(Book::getBookCode,bookCode));
-        return book.getBookName();
+        model.addAttribute("bookName",book.getBookName());
+        model.addAttribute("bookDetail",book.getBookDetail());
+        model.addAttribute("bookCode",book.getBookCode());
+        model.addAttribute("bookFlag",book.getFlag());
+        return "BookDetail";
+    }
+
+    @RequestMapping("borrowBook")
+    public String borrowBook(@RequestParam("bookCode") String bookCode,HttpServletRequest request,Model model){
+        User user=(User) request.getSession().getAttribute("user");
+        try {
+            borrowBookService.borrowBook(user,bookCode);
+        }catch (Exception e){
+            model.addAttribute("msg",e.getMessage());
+            return "succeed";
+        }
+            model.addAttribute("msg","succeed");
+        return "succeed";
+    }
+
+    @RequestMapping("getBorrowedBook")
+    public String getBorrowedBook(@RequestParam(required = false, defaultValue = "1") String num,HttpServletRequest request,Model model){
+        User user=(User) request.getSession().getAttribute("user");
+        int pageNum = Integer.parseInt(num);
+        pageParamUser.setPageNum(pageNum);
+        pageParamUser.setParam(user);
+        PageInfo<Book> pageInfo = hadToBorrowBooksService.page(pageParamUser);
+        model.addAttribute("page", pageInfo);
+        return "SelfBorrowedBook";
     }
 
 

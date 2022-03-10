@@ -22,11 +22,15 @@ public class BookBorrowHistory implements Serializable {
 
     @TableField("user_name")
     private String userName;
- /**
-  * 借阅类型
-  */
+
+    /**
+     * 借阅名称
+     */
     @TableField("borrowing_bookname")
     private String borrowingBookname;
+
+    @TableField("expiration_time")
+    private Date expirationTime;
 
 
     @TableField(value = "creat_time", fill = FieldFill.INSERT)

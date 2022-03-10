@@ -25,6 +25,7 @@
             <th>借阅人</th>
             <th>图书名称</th>
             <th>借阅时间</th>
+            <th>应归还时间</th>
         </tr>
         </thead>
 
@@ -33,6 +34,7 @@
             <td th:text="${bookBorrowHistory.userName}"></td>
             <td th:text="${bookBorrowHistory.borrowingBookname}"></td>
             <td th:text="${#dates.format(bookBorrowHistory.creatTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td th:text="${#dates.format(bookBorrowHistory.expirationTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
         </tr>
         <td colspan="9">
             共<span th:text="${page.pages}"/>页，<span th:text="${page.total }"/>条记录

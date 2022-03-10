@@ -5,14 +5,30 @@ spring:
     name: book
   resources:
       static-locations: /static/
-#  mvc:
-#      static-path-pattern: /static/**
-
+  mail:
+    #smtp服务主机  qq邮箱则为smtp.qq.com
+    host: smtp.163.com
+    #服务协议
+    protocol: smtp
+    # 编码集
+    default-encoding: UTF-8
+    #发送邮件的账户
+    username: Yx_990509@163.com
+    #授权码
+    password: HVPUSAVYMIRMCODZ
+    test-connection: true
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     name: defaultDataSource # 数据源名称
-    url: jdbc:mysql://localhost:3306/bookmanage?serverTimezone=UTC # 数据库连接地址
+    url: jdbc:mysql://localhost:3306/bookmanage?serverTimezone=Asia/Shanghai # 数据库连接地址
     username: root # 数据库用户名&密码：
     password: 123456
 
@@ -28,6 +44,9 @@ spring:
     prefix=classpath: /templates/ # 在构建 URL 时添加到视图名称前的前缀（默认值： classpath:/templates/ ）
     suffix=: .html # 在构建 URL 时添加到视图名称后的后缀（默认值： .html ）
 
+mybatis:
+  mapper-locations: classpath:mapping/*.xml
+  type-aliases-package: com.yanxu.book.entity
 
 pagehelper:
   #分页插件

@@ -20,6 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Calendar;
+import java.util.Date;
+
 @Service
 public class BorrowBookServiceImp extends ServiceImpl<BaseMapper<Book>,Book> implements BorrowBookService {
 
@@ -49,13 +52,20 @@ public class BorrowBookServiceImp extends ServiceImpl<BaseMapper<Book>,Book> imp
         User getUser=userMapper.selectOne(new QueryWrapper<User>().lambda().eq(User::getUserId,user.getUserId()));
         Book getBook=bookMapper.selectOne(new QueryWrapper<Book>().lambda().eq(Book::getBookCode,bookCode));
         if ((getUser.getNumberOfBorrow()+1)<=getUser.getMaxNumberOfBorrow()){
+            Calendar calendar=Calendar.getInstance();
+            calendar.setTime(new Date());
+            calendar.add(Calendar.DATE,getUser.getBorrowDays());
+
             Book book=new Book();
             book.setUserId(getUser.getUserId());
             book.setFlag("1");
+            book.setExpirationTime(calendar.getTime());
 
             BookBorrowHistory bookBorrowHistory=new BookBorrowHistory();
             bookBorrowHistory.setBorrowingBookname(getBook.getBookName());
             bookBorrowHistory.setUserName(getUser.getUserId());
+            bookBorrowHistory.setExpirationTime(calendar.getTime());
+
             getUser.setNumberOfBorrow(getUser.getNumberOfBorrow()+1);
             bookMapper.update(book,new UpdateWrapper<Book>().lambda().eq(Book::getBookCode,bookCode));
             borrowHistoryMapper.insert(bookBorrowHistory);

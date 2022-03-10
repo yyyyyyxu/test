@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yanxu.book.mapper.BookMapper">
+
+    <resultMap id="BaseResultMap" type="com.yanxu.book.entity.Book">
+        <result column="ID" jdbcType="VARCHAR" property="id" />
+        <result column="book_code" jdbcType="VARCHAR" property="bookCode"/>
+        <result column="book_name" jdbcType="VARCHAR" property="bookName"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="flag" jdbcType="VARCHAR" property="flag"/>
+        <result column="book_detail" jdbcType="VARCHAR" property="bookDetail"/>
+        <result column="creat_time" jdbcType="VARCHAR" property="creatTime"/>
+        <result column="update_time" jdbcType="VARCHAR" property="updateTime"/>
+        <result column="expiration_Time" jdbcType="VARCHAR" property="expirationTime"/>
+        <result column="image" jdbcType="LONGBLOB" property="image"/>
+    </resultMap>
+
+    <resultMap id="ExpireyUserRemindResultMap" type="com.yanxu.book.entity.ExpireyUserRemind">
+        <result column="book_name" jdbcType="VARCHAR" property="bookName"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="expiration_Time" jdbcType="VARCHAR" property="expirationTime"/>
+    </resultMap>
+
+    <select id="getExpireyUser" resultMap="ExpireyUserRemindResultMap" parameterType="date" >
+        <![CDATA[
+        SELECT
+        u.email,b.book_name,b.expiration_Time
+        FROM
+        ( book b INNER JOIN USER u ON b.user_id = u.user_id)
+        WHERE
+        #{date}<=b.expiration_Time
+        AND
+        #{nowDate}>b.expiration_Time
+        ]]>
+    </select>
+
+</mapper>

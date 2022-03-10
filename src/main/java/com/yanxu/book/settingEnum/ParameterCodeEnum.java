@@ -7,7 +7,8 @@ import lombok.Data;
 public enum ParameterCodeEnum {
 
     LOGININ_HISTORY_TASK_RETAIN("1", "loginHistory"),
-    BORROW_HISTORY_TASK_RETAIN("2", "borrowHistory");
+    BORROW_HISTORY_TASK_RETAIN("2", "borrowHistory"),
+    REMIND_RETURNBOOK_TASK_RETAIN("3", "remindReturnBook");
 
 
 

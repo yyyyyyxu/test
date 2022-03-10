@@ -34,7 +34,9 @@ public class BorrowHistoryTaskImp implements Task {
 
     private static BorrowHistoryTaskImp borrowHistoryTask;
 
-    private String taskName="借阅历史定时";
+    private String taskName;
+
+    private String taskCode="1";
 
     public static BorrowHistoryTaskImp getBorrowHistoryTask() {
         if (borrowHistoryTask == null) {
@@ -54,7 +56,7 @@ public class BorrowHistoryTaskImp implements Task {
                 eq(Setting::getParameterName,ParameterCodeEnum.BORROW_HISTORY_TASK_RETAIN.getParameterName()));
 
         Date date=new Date();
-        String nowFormat= DateFormatUtil.ShortStringFormat(date);
+        String nowFormat= DateFormatUtil.LongStringFormat(date);
         Calendar calendar=Calendar.getInstance();
         calendar.add(Calendar.DATE,-Integer.valueOf(setting.getParameterValue()));
         List<BookBorrowHistory> borrowHistories=bookBorrowHistoryMapper.selectList(new QueryWrapper<BookBorrowHistory>().lambda().le(BookBorrowHistory::getCreatTime,calendar.getTime()));

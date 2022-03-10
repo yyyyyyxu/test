@@ -8,22 +8,21 @@ import java.util.Date;
 
 public  class DateFormatUtil {
 
-    private static final String SHORT=new String("yyyy-MM-dd HH:mm:ss");
+    private static final String LONG=new String("yyyy-MM-dd HH:mm:ss");
 
+    private static final String SHORT=new String("yyyy-MM-dd");
+
+
+
+    public static String LongStringFormat(Date date){
+        DateFormat df =new SimpleDateFormat(LONG);
+        return df.format(date);
+    }
 
 
     public static String ShortStringFormat(Date date){
         DateFormat df =new SimpleDateFormat(SHORT);
         return df.format(date);
-    }
-
-    public static Date ShortDateFormat(Date dateParam) throws ParseException {
-        Calendar calendar=Calendar.getInstance();
-        calendar.setTime(dateParam);
-        calendar.add(Calendar.HOUR,-8);
-        SimpleDateFormat simpleDateFormat=new SimpleDateFormat(DateFormatUtil.SHORT);
-        Date date=simpleDateFormat.parse(DateFormatUtil.ShortStringFormat(calendar.getTime()));
-        return calendar.getTime();
     }
 
 

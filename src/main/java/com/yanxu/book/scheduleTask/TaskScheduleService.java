@@ -29,7 +29,7 @@ public class TaskScheduleService {
         if (ThreadPoolUtil.getRunnableList().size() != 0) {
             for (Task task:ThreadPoolUtil.getRunnableList()) {
                 Setting setting=settingMapper.selectOne(new QueryWrapper<Setting>().lambda().eq(Setting::getParameterCode, task.getCode())
-                        .eq(Setting::getParameterName,task.getName()));
+                        .eq(Setting::getParameterName,"cron"));
                 if (!container.containsKey(task.getInstance().getName())) {
                     ThreadPoolTaskScheduler threadPoolTaskScheduler = ThreadPoolUtil.getInstance();
                     ScheduledFuture future = threadPoolTaskScheduler.schedule(task.getInstance(), new CronTrigger(setting.getParameterValue()));

@@ -18,6 +18,13 @@ public class HadToBorrowBooksServiceImp extends ServiceImpl<BaseMapper<Book>,Boo
     BookMapper bookMapper;
 
 
+    /**
+     * create by: yanxu
+     * description: 个人已借图书查询
+     * create time: 2022/3/10 14:04
+     * @Param: null
+     * @return
+     */
     @Override
     public List<Book> list(User user) {
         return bookMapper.selectList(new QueryWrapper<Book>().lambda().eq(Book::getUserId,user.getUserId()));

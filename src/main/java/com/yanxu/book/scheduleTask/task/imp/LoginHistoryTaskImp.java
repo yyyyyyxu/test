@@ -37,7 +37,7 @@ public class LoginHistoryTaskImp implements Task {
 
     private static LoginHistoryTaskImp loginHistoryTaskImp;
 
-    private String taskName="登陆历史定时";
+    private String taskName;
 
     private String taskCode="1";
 
@@ -59,7 +59,7 @@ public class LoginHistoryTaskImp implements Task {
                 eq(Setting::getParameterName,ParameterCodeEnum.LOGININ_HISTORY_TASK_RETAIN.getParameterName()));
 
         Date date=new Date();
-        String nowFormat=DateFormatUtil.ShortStringFormat(date);
+        String nowFormat=DateFormatUtil.LongStringFormat(date);
         Calendar calendar=Calendar.getInstance();
         calendar.add(Calendar.DATE,-Integer.valueOf(setting.getParameterValue()));
         List<UserLoginHistory> userLoginHistories=userLoginHistoryMapper.selectList(new QueryWrapper<UserLoginHistory>().lambda().le(UserLoginHistory::getCreatTime,calendar.getTime()));

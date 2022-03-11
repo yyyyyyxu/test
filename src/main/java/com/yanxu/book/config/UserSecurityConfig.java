@@ -1,6 +1,7 @@
 package com.yanxu.book.config;
 
 import com.yanxu.book.auth.DaoAuthenticationProvider;
+import com.yanxu.book.auth.HttpStatusLoginFailureHandler;
 import com.yanxu.book.auth.JsonLoginConfigurer;
 import com.yanxu.book.auth.JsonLoginSuccessHandler;
 import com.yanxu.book.service.UserLoginService;
@@ -43,12 +44,12 @@ public class UserSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.formLogin()
                 .loginPage("/user/login")
-                .defaultSuccessUrl("/book/getBookList").successHandler(new JsonLoginSuccessHandler()).permitAll()
+                .defaultSuccessUrl("/book/getBookList").successHandler(new JsonLoginSuccessHandler()).failureForwardUrl("http://localhost:8080/user/loginFailure").permitAll()
                 .and().logout()
                 .logoutUrl("/book/logout")
                 .logoutSuccessUrl("/user/login").permitAll()
                 .and().authorizeRequests()
-                .antMatchers("/", "/user/login").permitAll()
+                .antMatchers("/", "/user/login","user/loginFailure").permitAll()
                 .anyRequest().authenticated()
                 .and().rememberMe().tokenRepository(presistentTokenRepository())
                 .tokenValiditySeconds(60 * 60)

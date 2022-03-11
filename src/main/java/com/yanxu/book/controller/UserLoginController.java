@@ -21,4 +21,9 @@ public class UserLoginController {
         return "login";
     }
 
+    @RequestMapping("loginFailure")
+    public String loginFailure(){
+        return "loginFailure";
+    }
+
 }

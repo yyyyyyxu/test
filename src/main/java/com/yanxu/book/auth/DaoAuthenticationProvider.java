@@ -1,10 +1,18 @@
 package com.yanxu.book.auth;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yanxu.book.entity.LoginFailureHistory;
+import com.yanxu.book.entity.Setting;
+import com.yanxu.book.entity.User;
+import com.yanxu.book.mapper.SettingMapper;
 import com.yanxu.book.mapper.UserLoginFailureHistoryMapper;
+import com.yanxu.book.mapper.UserMapper;
+import com.yanxu.book.service.UserLoginService;
+import com.yanxu.book.settingEnum.ParameterCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -19,10 +27,17 @@ import org.springframework.util.Assert;
 
 import java.util.Date;
 
-public class DaoAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
+public class DaoAuthenticationProvider extends AbstractBookUserDetailsAuthenticationProvider {
 
     @Autowired
     UserLoginFailureHistoryMapper mapper;
+
+    @Autowired
+    UserMapper userMapper;
+
+    @Autowired
+    SettingMapper settingMapper;
+
     private static final String USER_NOT_FOUND_PASSWORD = "userNotFoundPassword";
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private volatile String userNotFoundEncodedPassword;
@@ -32,22 +47,37 @@ public class DaoAuthenticationProvider extends AbstractUserDetailsAuthentication
 
     @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
+        User user=userMapper.selectOne(new QueryWrapper<User>().lambda().eq(User::getUserId,authentication.getPrincipal()));
+
+
         if (authentication.getCredentials() == null) {
             this.logger.debug("Authentication failed: no credentials provided");
             LoginFailureHistory loginFailureHistory = new LoginFailureHistory();
             loginFailureHistory.setUserName(userDetails.getUsername());
             loginFailureHistory.setCreatTime(new Date());
             mapper.insert(loginFailureHistory);
+
             throw new BadCredentialsException(this.messages.getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"));
         } else {
+
+            int faultTime=user.getFaultTime();
+            Setting setting=settingMapper.selectOne(new QueryWrapper<Setting>().lambda().eq(Setting::getParameterCode, ParameterCodeEnum.REFUSED_TOLOGIN.getParameterCode())
+                    .eq(Setting::getParameterName,ParameterCodeEnum.REFUSED_TOLOGIN.getParameterName()));
+            int refusedToLogin=Integer.parseInt(setting.getParameterValue());
+
             String presentedPassword = authentication.getCredentials().toString();
             if (!this.passwordEncoder.matches(presentedPassword, userDetails.getPassword())) {
+                User user1=new User();
+                user1.setFaultTime(user.getFaultTime()+1);
+                userMapper.update(user1,new QueryWrapper<User>().lambda().eq(User::getUserId,authentication.getPrincipal()));
                 LoginFailureHistory loginFailureHistory = new LoginFailureHistory();
                 loginFailureHistory.setUserName(userDetails.getUsername());
                 loginFailureHistory.setCreatTime(new Date());
                 mapper.insert(loginFailureHistory);
                 this.logger.debug("Authentication failed: password does not match stored value");
                 throw new BadCredentialsException(this.messages.getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"));
+            }else if (faultTime>=refusedToLogin){
+                throw new LockedException("失败次数过多已锁定");
             }
         }
     }

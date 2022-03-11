@@ -17,6 +17,6 @@ public class HttpStatusLoginFailureHandler implements AuthenticationFailureHandl
                                         AuthenticationException exception) throws IOException, ServletException {
         String path = request.getContextPath();
         String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
-        response.sendRedirect(basePath + "user/login");
+        response.sendRedirect(basePath + "user/loginFailure");
     }
 }

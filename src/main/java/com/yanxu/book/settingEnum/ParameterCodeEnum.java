@@ -12,7 +12,17 @@ public enum ParameterCodeEnum {
     OVERDUE_RETURNBOOK_TASK_RETAIN("4","overdueReturnBookTask"),
 
 
-    REFUSED_TOBORROW("15","refusedToBorrow");
+    /**
+     * 逾期还书多少次不能再次借阅
+     */
+    REFUSED_TOBORROW("15","refusedToBorrow"),
+
+    /**
+     * 登录错误多少次导致锁定账号
+     */
+    REFUSED_TOLOGIN("16","refusedToLogin");
+
+
 
 
 

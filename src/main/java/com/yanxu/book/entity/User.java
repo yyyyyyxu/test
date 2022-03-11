@@ -36,6 +36,9 @@ public class User implements Serializable {
     @TableField("maxnumber_borrow")
     private int maxNumberOfBorrow;
 
+    @TableField("overdue_time")
+    private int overdueTime;
+
     @TableField("fault_time")
     private int faultTime;
 

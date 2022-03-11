@@ -6,9 +6,14 @@ import lombok.Data;
 
 public enum ParameterCodeEnum {
 
-    LOGININ_HISTORY_TASK_RETAIN("1", "loginHistory"),
-    BORROW_HISTORY_TASK_RETAIN("2", "borrowHistory"),
-    REMIND_RETURNBOOK_TASK_RETAIN("3", "remindReturnBook");
+    LOGININ_HISTORY_TASK_RETAIN("1", "loginHistoryTask"),
+    BORROW_HISTORY_TASK_RETAIN("2", "borrowHistoryTask"),
+    REMIND_RETURNBOOK_TASK_RETAIN("3", "remindReturnBookTask"),
+    OVERDUE_RETURNBOOK_TASK_RETAIN("4","overdueReturnBookTask"),
+
+
+    REFUSED_TOBORROW("15","refusedToBorrow");
+
 
 
 

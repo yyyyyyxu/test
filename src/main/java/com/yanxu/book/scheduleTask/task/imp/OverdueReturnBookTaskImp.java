@@ -1,15 +1,15 @@
 package com.yanxu.book.scheduleTask.task.imp;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.yanxu.book.config.SpringContextUtil;
 import com.yanxu.book.entity.Email;
 import com.yanxu.book.entity.ExpireyUserRemind;
-import com.yanxu.book.entity.Setting;
 import com.yanxu.book.entity.ToEmail;
+import com.yanxu.book.entity.User;
 import com.yanxu.book.mapper.BookMapper;
 import com.yanxu.book.mapper.SettingMapper;
+import com.yanxu.book.mapper.UserMapper;
 import com.yanxu.book.scheduleTask.task.Task;
-import com.yanxu.book.settingEnum.ParameterCodeEnum;
 import com.yanxu.book.util.DateFormatUtil;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +19,12 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 @Data
 @Component
-public class RemindReturnBookTaskImp implements Task {
+public class OverdueReturnBookTaskImp implements Task {
 
     @Autowired
     BookMapper bookMapper;
@@ -34,57 +33,58 @@ public class RemindReturnBookTaskImp implements Task {
     SettingMapper settingMapper;
 
     @Autowired
+    UserMapper userMapper;
+
+    @Autowired
     private JavaMailSender mailSender;
 
 
     private String taskName;
 
-    private String taskCode = "3";
+    private String taskCode = "4";
 
-    private static RemindReturnBookTaskImp remindReturnBookTaskImp;
+    private static OverdueReturnBookTaskImp overdueReturnBookTaskImp;
 
-    public static RemindReturnBookTaskImp getRemindReturnBookTask() {
-        if (remindReturnBookTaskImp == null) {
-            synchronized (RemindReturnBookTaskImp.class) {
-                if (remindReturnBookTaskImp == null) {
-                    remindReturnBookTaskImp = new RemindReturnBookTaskImp();
-                    remindReturnBookTaskImp.setTaskName("RemindReturnBookTask");
+    public static OverdueReturnBookTaskImp getOverdueReturnBookTask() {
+        if (overdueReturnBookTaskImp == null) {
+            synchronized (OverdueReturnBookTaskImp.class) {
+                if (overdueReturnBookTaskImp == null) {
+                    overdueReturnBookTaskImp = new OverdueReturnBookTaskImp();
+                    overdueReturnBookTaskImp.setTaskName("OverdueReturnBookTask");
                 }
             }
         }
-        return remindReturnBookTaskImp;
+        return overdueReturnBookTaskImp;
     }
 
     @Override
     public void run() {
-
         AbstractApplicationContext ac = (AbstractApplicationContext) SpringContextUtil.getApplicationContext();
-        SettingMapper settingMapper = ac.getBean(SettingMapper.class);
         BookMapper bookMapper = ac.getBean(BookMapper.class);
         Email email = ac.getBean(Email.class);
+        UserMapper userMapper = ac.getBean(UserMapper.class);
         JavaMailSender mailSender = ac.getBean(JavaMailSender.class);
-        Setting setting = settingMapper.selectOne(new QueryWrapper<Setting>().lambda().eq(Setting::getParameterCode, ParameterCodeEnum.REMIND_RETURNBOOK_TASK_RETAIN.getParameterCode()).
-                eq(Setting::getParameterName, ParameterCodeEnum.REMIND_RETURNBOOK_TASK_RETAIN.getParameterName()));
-        Integer daysInAdvance = Integer.parseInt(setting.getParameterValue());
-        Calendar calendar = Calendar.getInstance();
 
-        calendar.setTime(new Date());
-        calendar.add(Calendar.DATE, -daysInAdvance);
-        String deadLine = DateFormatUtil.LongStringFormat(calendar.getTime());
-
-        List<ExpireyUserRemind> expireyUserRemindList = bookMapper.getExpireyUser(deadLine, DateFormatUtil.LongStringFormat(new Date()));
+        List<ExpireyUserRemind> expireyUserRemindList = bookMapper.getOverdueUser(DateFormatUtil.LongStringFormat(new Date()));
 
         expireyUserRemindList.forEach(x -> {
 
 
             try {
+
+                User user=new User();
+                user.setOverdueTime(x.getOverdueTime()+1);
+                userMapper.update(user,new UpdateWrapper<User>().lambda().eq(User::getUserId,x.getUserId()));
+
+
+
                 String returnDate = DateFormatUtil.LongStringFormat(x.getExpirationTime());
                 ToEmail toEmail = new ToEmail();
                 String[] getEmail = new String[1];
                 getEmail[0] = x.getEmail();
 
                 toEmail.setTos(getEmail);
-                toEmail.setSubject("您近期有将要到期归还的图书");
+                toEmail.setSubject("您有逾期归还的图书请尽快归还");
                 toEmail.setContent("图书名：" + x.getBookName() + "归还时间：" + returnDate);
 
 
@@ -102,14 +102,12 @@ public class RemindReturnBookTaskImp implements Task {
                 e.printStackTrace();
             }
         });
-
-
     }
 
 
     @Override
     public Task getInstance() {
-        return RemindReturnBookTaskImp.getRemindReturnBookTask();
+        return OverdueReturnBookTaskImp.getOverdueReturnBookTask();
     }
 
     @Override

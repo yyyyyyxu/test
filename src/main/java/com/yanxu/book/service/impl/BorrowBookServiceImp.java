@@ -7,14 +7,17 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yanxu.book.entity.Book;
 import com.yanxu.book.entity.BookBorrowHistory;
+import com.yanxu.book.entity.Setting;
 import com.yanxu.book.entity.User;
 import com.yanxu.book.exeception.ResultExecept;
 import com.yanxu.book.mapper.BookBorrowHistoryMapper;
 import com.yanxu.book.mapper.BookMapper;
+import com.yanxu.book.mapper.SettingMapper;
 import com.yanxu.book.mapper.UserMapper;
 import com.yanxu.book.service.BookBorrowHistoryService;
 import com.yanxu.book.service.BorrowBookService;
 import com.yanxu.book.settingEnum.ActivityException;
+import com.yanxu.book.settingEnum.ParameterCodeEnum;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +41,8 @@ public class BorrowBookServiceImp extends ServiceImpl<BaseMapper<Book>,Book> imp
     @Autowired
     BookBorrowHistoryMapper borrowHistoryMapper;
 
+    @Autowired
+    SettingMapper settingMapper;
 
     /**
      * create by: yanxu
@@ -46,31 +51,42 @@ public class BorrowBookServiceImp extends ServiceImpl<BaseMapper<Book>,Book> imp
      * @Param: User,bookCode
      * @return void
      */
+
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void borrowBook(User user,String bookCode) throws ResultExecept{
         User getUser=userMapper.selectOne(new QueryWrapper<User>().lambda().eq(User::getUserId,user.getUserId()));
         Book getBook=bookMapper.selectOne(new QueryWrapper<Book>().lambda().eq(Book::getBookCode,bookCode));
         if ((getUser.getNumberOfBorrow()+1)<=getUser.getMaxNumberOfBorrow()){
-            Calendar calendar=Calendar.getInstance();
-            calendar.setTime(new Date());
-            calendar.add(Calendar.DATE,getUser.getBorrowDays());
+            Setting setting=settingMapper.selectOne(new QueryWrapper<Setting>().lambda().eq(Setting::getParameterCode, ParameterCodeEnum.REFUSED_TOBORROW.getParameterCode())
+                    .eq(Setting::getParameterName,ParameterCodeEnum.REFUSED_TOBORROW.getParameterName()));
 
-            Book book=new Book();
-            book.setUserId(getUser.getUserId());
-            book.setFlag("1");
-            book.setExpirationTime(calendar.getTime());
+            if (getUser.getOverdueTime()<(Integer.parseInt(setting.getParameterValue()))){
+                Calendar calendar=Calendar.getInstance();
+                calendar.setTime(new Date());
+                calendar.add(Calendar.DATE,getUser.getBorrowDays());
 
-            BookBorrowHistory bookBorrowHistory=new BookBorrowHistory();
-            bookBorrowHistory.setBorrowingBookname(getBook.getBookName());
-            bookBorrowHistory.setUserName(getUser.getUserId());
-            bookBorrowHistory.setExpirationTime(calendar.getTime());
+                Book book=new Book();
+                book.setUserId(getUser.getUserId());
+                book.setFlag("1");
+                book.setExpirationTime(calendar.getTime());
 
-            getUser.setNumberOfBorrow(getUser.getNumberOfBorrow()+1);
-            bookMapper.update(book,new UpdateWrapper<Book>().lambda().eq(Book::getBookCode,bookCode));
-            borrowHistoryMapper.insert(bookBorrowHistory);
+                BookBorrowHistory bookBorrowHistory=new BookBorrowHistory();
+                bookBorrowHistory.setBorrowingBookname(getBook.getBookName());
+                bookBorrowHistory.setUserName(getUser.getUserId());
+                bookBorrowHistory.setExpirationTime(calendar.getTime());
 
-            userMapper.update(getUser,new UpdateWrapper<User>().lambda().eq(User::getUserId,getUser.getUserId()));
+                getUser.setNumberOfBorrow(getUser.getNumberOfBorrow()+1);
+                bookMapper.update(book,new UpdateWrapper<Book>().lambda().eq(Book::getBookCode,bookCode));
+                borrowHistoryMapper.insert(bookBorrowHistory);
+
+                userMapper.update(getUser,new UpdateWrapper<User>().lambda().eq(User::getUserId,getUser.getUserId()));
+            }else {
+                throw new ResultExecept(ActivityException.BORROW_BOOK_FORBID.getCode(),ActivityException.BORROW_BOOK_FORBID.getMessage());
+            }
+
+
         }else {throw new ResultExecept(ActivityException.BORROW_BOOK_NUMBER_GETMAX.getCode(),ActivityException.BORROW_BOOK_NUMBER_GETMAX.getMessage());}
 
     }

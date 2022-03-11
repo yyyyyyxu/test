@@ -44,8 +44,9 @@ spring:
     prefix=classpath: /templates/ # 在构建 URL 时添加到视图名称前的前缀（默认值： classpath:/templates/ ）
     suffix=: .html # 在构建 URL 时添加到视图名称后的后缀（默认值： .html ）
 
-mybatis:
-  mapper-locations: classpath:mapping/*.xml
+mybatis-plus:
+  mapper-locations:
+    classpath: mapper/*.xml
   type-aliases-package: com.yanxu.book.entity
 
 pagehelper:

@@ -12,7 +12,6 @@
         <result column="creat_time" jdbcType="VARCHAR" property="creatTime"/>
         <result column="update_time" jdbcType="VARCHAR" property="updateTime"/>
         <result column="expiration_Time" jdbcType="VARCHAR" property="expirationTime"/>
-        <result column="image" jdbcType="LONGBLOB" property="image"/>
     </resultMap>
 
     <resultMap id="ExpireyUserRemindResultMap" type="com.yanxu.book.entity.ExpireyUserRemind">
@@ -21,7 +20,7 @@
         <result column="expiration_Time" jdbcType="VARCHAR" property="expirationTime"/>
     </resultMap>
 
-    <select id="getExpireyUser" resultMap="ExpireyUserRemindResultMap" parameterType="date" >
+    <select id="getExpireyUser" resultMap="ExpireyUserRemindResultMap" parameterType="string" >
         <![CDATA[
         SELECT
         u.email,b.book_name,b.expiration_Time
@@ -31,6 +30,17 @@
         #{date}<=b.expiration_Time
         AND
         #{nowDate}>b.expiration_Time
+        ]]>
+    </select>
+
+    <select id="getOverdueUser" resultMap="ExpireyUserRemindResultMap" parameterType="string" >
+        <![CDATA[
+        SELECT
+        u.email,b.book_name,u.user_id,u.overdue_time
+        FROM
+        ( book b INNER JOIN USER u ON b.user_id = u.user_id)
+        WHERE
+        #{date}>=b.expiration_Time
         ]]>
     </select>
 

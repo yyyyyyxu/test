@@ -15,4 +15,6 @@ import java.util.List;
 public interface BookMapper extends BaseMapper<Book> {
 
     List<ExpireyUserRemind> getExpireyUser(@Param("date") String date,@Param("nowDate") String nowDate);
+
+    List<ExpireyUserRemind> getOverdueUser(@Param("date") String date);
 }

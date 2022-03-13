@@ -4,7 +4,10 @@ spring:
   application:
     name: book
   resources:
-      static-locations: /static/
+      static-locations: classpath:/static/
+  mvc:
+      static-path-pattern: /static/**
+
   mail:
     #smtp服务主机  qq邮箱则为smtp.qq.com
     host: smtp.163.com

@@ -15,8 +15,7 @@ public class HttpStatusLoginFailureHandler implements AuthenticationFailureHandl
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException, ServletException {
-        String path = request.getContextPath();
-        String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
-        response.sendRedirect(basePath + "user/loginFailure");
+        request.getSession().setAttribute("AuthenticationException",exception);
+        request.getRequestDispatcher("/user/loginFailure").forward(request, response);
     }
 }

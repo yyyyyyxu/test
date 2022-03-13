@@ -1,36 +1,82 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="referrer" content="no-referrer"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="referrer" content="no-referrer" />
+	<link rel="stylesheet" type="text/css" media="all" href="/static/css/style.css" th:href="@{/static/css/asd.css}"/>
 </head>
+
 <body>
-<div align="middle">
-    <table border="1">
+	<div id="head">图书管理系统</div>
+	<div>
+		<div id="list">
+			<ul>
+				<li>
+					<a th:href="@{/getBookBorrowHistory/allHistory}">
+						<div>借阅记录查询</div>
+					</a>
+				</li>
+				<li>
+					<a href="javascript:;">
+						<div>123456789</div>
+					</a>
+				</li>
+				<li>
+					<a href="javascript:;">
+						<div>123456789</div>
+					</a>
+				</li>
+				<li>
+					<a href="javascript:;">
+						<div>123456789</div>
+					</a>
+				</li>
+			</ul>
+			<ul>
+				<li>
+					<a href="javascript:;">
+						<div>123456789</div>
+					</a>
+				</li>
+				<li>
+					<a href="javascript:;">
+						<div>123456789</div>
+					</a>
+				</li>
+				<li>
+					<a href="javascript:;">
+						<div>123456789</div>
+					</a>
+				</li>
+				<li>
+					<a th:href="@{/book/logout}">
+						<div>退出</div>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div id="content">
+			<table border="1">
+				<thead>
+					<tr>
+						<th>图书名称</th>
+						<th>详情</th>
+					</tr>
+				</thead>
 
-
-        <thead>
-        <tr>
-            <th>图书名称</th>
-            <th>详情</th>
-        </tr>
-        </thead>
-
-        <tbody align="middle">
-
-            <td th:text="${bookName}"></td>
-            <td th:text="${bookDetail}"></td>
-            <td th:if="${bookFlag}eq '0'">
-                <a th:href="@{/book/borrowBook?(bookCode=${bookCode})}">借阅</a>
-            </td>
-            <td>
-                <img th:src="@{'/bookpic/'+${bookCode}+'.png'}" height="250" width="250">
-            </td>
-
-        </tbody>
-
-    </table>
-
-
-</div>
+				<tbody align="middle">
+					<td th:text="${bookName}"></td>
+					<td th:text="${bookDetail}"></td>
+					<td th:if="${bookFlag}eq '0'">
+						<a th:href="@{/book/borrowBook?(bookCode=${bookCode})}">借阅</a>
+					</td>
+					<td>
+						<img th:src="@{'/bookpic/'+${bookCode}+'.png'}" height="250" width="250" />
+					</td>
+				</tbody>
+			</table>
+		</div>
+	</div>
 </body>
+
 </html>

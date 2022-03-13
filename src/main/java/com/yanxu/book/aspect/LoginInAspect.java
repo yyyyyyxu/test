@@ -26,7 +26,7 @@ public class LoginInAspect {
     @Autowired
     UserMapper userMapper;
 
-    @Pointcut(value = "execution(* org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider.authenticate(..))")
+    @Pointcut(value = "execution(* com.yanxu.book.auth.AbstractBookUserDetailsAuthenticationProvider.authenticate(..))")
     public void pointcut(){}
 
     @AfterReturning(value = "pointcut()",returning = "ret")

@@ -1,27 +1,70 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="referrer" content="no-referrer" />
+    <style>
+        .oneline {
+            width: 300px;
+            line-height: 2.5;
+            margin: 10px auto;
+        }
+
+        .oneline label {
+            width: 100px;
+            text-indent: 15px;
+            font-size: 14px;
+            font-family: "Microsoft Yahei";
+            display: inline-block;
+        }
+
+        .oneline .sinput {
+            width: 60%;
+            height: 30px;
+            border-radius: 6px;
+            border: 1px solid #e2e2e2;
+        }
+
+        .but {
+            margin-left: 20px;
+            width: 100px;
+            height: 30px;
+            border: 0;
+            background-color: #5899d0;
+            color: #fff;
+            font-size: 14px;
+            border-radius: 6px;
+        }
+    </style>
     <title>Login</title>
 </head>
+
 <body>
-<div id="login">
-    <h1>Login</h1>
-    <form method="post" th:action="@{/user/login}">
-        <input type="text" required="required" placeholder="用户名" name="username"></input>
-        <input type="password" required="required" placeholder="密码" name="password"></input>
-        <input type="checkbox" name="remember-me">记住我</input>
-        <button class="but" type="submit" value="login">登录</button>
-    </form>
-</div>
-<!--<form th:action="@{/book/login}" method="post">-->
-<!--    用戶名：<input type="text" name="username"/>-->
-<!--    <br>-->
-<!--    密碼: <input type="text" name="password">-->
-<!--    <br>-->
-<!--    <input type="checkbox" name="remember-me">自動登錄-->
-<!--    <input type="submit" value="login">-->
-<!--</form>-->
+    <div id="login" style="margin-top: 15%;text-align: center;">
+        <h1 style="font-size: 60px;">图书管理系统</h1>
+        <form method="post" th:action="@{/user/login}">
+            <input class="oneline" type="text" required="required" placeholder="用户名" name="username"></input>
+            <br>
+            <input class="oneline" type="password" required="required" placeholder="密码" name="password"></input>
+            <br>
+            <span th:text="${exception}" style="color:#F00;"></span>
+            <br>
+            <br>
+            <input type="checkbox" name="remember-me">记住我</input>
+            <br>
+            <br>
+            <button class="but" type="submit" value="login">登录</button>
+        </form>
+    </div>
+    <!--<form th:action="@{/book/login}" method="post">-->
+    <!--    用戶名：<input type="text" name="username"/>-->
+    <!--    <br>-->
+    <!--    密碼: <input type="text" name="password">-->
+    <!--    <br>-->
+    <!--    <input type="checkbox" name="remember-me">自動登錄-->
+    <!--    <input type="submit" value="login">-->
+    <!--</form>-->
 </body>
+
 </html>

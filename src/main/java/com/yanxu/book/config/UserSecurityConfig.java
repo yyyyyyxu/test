@@ -44,7 +44,8 @@ public class UserSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.formLogin()
                 .loginPage("/user/login")
-                .defaultSuccessUrl("/book/getBookList").successHandler(new JsonLoginSuccessHandler()).failureForwardUrl("http://localhost:8080/user/loginFailure").permitAll()
+                .failureHandler(new HttpStatusLoginFailureHandler())
+                .defaultSuccessUrl("/book/bookDetails").successHandler(new JsonLoginSuccessHandler()).permitAll()
                 .and().logout()
                 .logoutUrl("/book/logout")
                 .logoutSuccessUrl("/user/login").permitAll()

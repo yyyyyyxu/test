@@ -14,8 +14,8 @@ public class TaskScheduleStart implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        TaskScheduleService taskScheduleService=new TaskScheduleService();
-        taskScheduleService.start();
+//        TaskScheduleService taskScheduleService=new TaskScheduleService();
+//        taskScheduleService.start();
     }
 
 }

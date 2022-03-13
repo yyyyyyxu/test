@@ -48,9 +48,15 @@ public class DaoAuthenticationProvider extends AbstractBookUserDetailsAuthentica
     @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
         User user=userMapper.selectOne(new QueryWrapper<User>().lambda().eq(User::getUserId,authentication.getPrincipal()));
-
+        int faultTime=user.getFaultTime();
+        Setting setting=settingMapper.selectOne(new QueryWrapper<Setting>().lambda().eq(Setting::getParameterCode, ParameterCodeEnum.REFUSED_TOLOGIN.getParameterCode())
+                .eq(Setting::getParameterName,ParameterCodeEnum.REFUSED_TOLOGIN.getParameterName()));
+        int refusedToLogin=Integer.parseInt(setting.getParameterValue());
 
         if (authentication.getCredentials() == null) {
+            if (faultTime>=refusedToLogin){
+                throw new LockedException("失败次数过多已锁定");
+            }
             this.logger.debug("Authentication failed: no credentials provided");
             LoginFailureHistory loginFailureHistory = new LoginFailureHistory();
             loginFailureHistory.setUserName(userDetails.getUsername());
@@ -60,13 +66,13 @@ public class DaoAuthenticationProvider extends AbstractBookUserDetailsAuthentica
             throw new BadCredentialsException(this.messages.getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"));
         } else {
 
-            int faultTime=user.getFaultTime();
-            Setting setting=settingMapper.selectOne(new QueryWrapper<Setting>().lambda().eq(Setting::getParameterCode, ParameterCodeEnum.REFUSED_TOLOGIN.getParameterCode())
-                    .eq(Setting::getParameterName,ParameterCodeEnum.REFUSED_TOLOGIN.getParameterName()));
-            int refusedToLogin=Integer.parseInt(setting.getParameterValue());
+
 
             String presentedPassword = authentication.getCredentials().toString();
             if (!this.passwordEncoder.matches(presentedPassword, userDetails.getPassword())) {
+                if (faultTime>=refusedToLogin){
+                    throw new LockedException("失败次数过多已锁定");
+                }
                 User user1=new User();
                 user1.setFaultTime(user.getFaultTime()+1);
                 userMapper.update(user1,new QueryWrapper<User>().lambda().eq(User::getUserId,authentication.getPrincipal()));
@@ -75,7 +81,7 @@ public class DaoAuthenticationProvider extends AbstractBookUserDetailsAuthentica
                 loginFailureHistory.setCreatTime(new Date());
                 mapper.insert(loginFailureHistory);
                 this.logger.debug("Authentication failed: password does not match stored value");
-                throw new BadCredentialsException(this.messages.getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"));
+                throw new BadCredentialsException(this.messages.getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "密码错误"));
             }else if (faultTime>=refusedToLogin){
                 throw new LockedException("失败次数过多已锁定");
             }

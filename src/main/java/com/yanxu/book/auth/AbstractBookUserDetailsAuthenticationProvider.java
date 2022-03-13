@@ -58,7 +58,7 @@ public abstract class AbstractBookUserDetailsAuthenticationProvider implements A
             } catch (UsernameNotFoundException var6) {
                 this.logger.debug("User '" + username + "' not found");
                 if (this.hideUserNotFoundExceptions) {
-                    throw new BadCredentialsException(this.messages.getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"));
+                    throw new BadCredentialsException(this.messages.getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "没有该用户"));
                 }
 
                 throw var6;

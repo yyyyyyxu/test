@@ -1,0 +1,19 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="referrer" content="no-referrer"/>
+    <link rel="stylesheet" type="text/css" media="all" href="/static/css/style.css" th:href="@{/static/css/asd.css}"/>
+</head>
+<body>
+<form method="post" th:action="@{/book/uploadLog}" enctype="multipart/form-data">
+    图片：<input type="file" name="uploadLog"/>
+    书籍编号：<input type="text" name="Code"/>
+    图书名称：<input type="text" name="Name"/>
+    书籍详情：<input type="text" name="Detail"/>
+    <button type="submit" class="button">录入</button>
+</form>
+<span th:text="${mag}"></span>
+
+</body>
+</html>

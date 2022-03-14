@@ -53,7 +53,7 @@ public class BookSearchController {
     @RequestMapping("insertBook")
     @ResponseBody
     public void insert(@RequestBody List<Book> list) {
-        bookInsertService.saveBatch(list);
+
     }
 
 

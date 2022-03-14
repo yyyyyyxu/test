@@ -13,23 +13,23 @@
         <div id="list">
             <ul>
                 <li>
-                    <a th:href="@{/getBookBorrowHistory/allHistory}">
-                        <div>借阅记录查询</div>
+                    <a th:href="@{/getBookBorrowHistory/selfHistory}">
+                        <div>个人借阅记录查询</div>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/book/getBorrowedBook}">
+                        <div>个人已借阅书籍查询</div>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/book/userGetBookList}">
+                        <div>图书资源列表</div>
                     </a>
                 </li>
                 <li>
                     <a href="javascript:;">
                         <div>123456789</div>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:;">
-                        <div>123456789</div>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/book/logout}">
-                        <div>退出</div>
                     </a>
                 </li>
             </ul>
@@ -50,14 +50,14 @@
                     </a>
                 </li>
                 <li>
-                    <a href="https://www.baidu.com">
-                        <div>123456789</div>
+                    <a th:href="@{/book/logout}">
+                        <div>退出</div>
                     </a>
                 </li>
             </ul>
         </div>
         <div id="content">
-            <a th:href="@{/book/logout}">退出</a>
+
 
             <table border="1">
 

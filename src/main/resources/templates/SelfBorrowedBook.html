@@ -19,13 +19,13 @@
         <div id="list">
             <ul>
                 <li>
-                    <a th:href="@{ManagerSetting.html}">
-                        <div>借阅记录查询</div>
+                    <a th:href="@{/getBookBorrowHistory/selfHistory}">
+                        <div>个人借阅记录查询</div>
                     </a>
                 </li>
                 <li>
-                    <a href="javascript:;">
-                        <div>123456789</div>
+                    <a th:href="@{/book/getBorrowedBook}">
+                        <div>个人已借阅书籍查询</div>
                     </a>
                 </li>
                 <li>
@@ -63,8 +63,7 @@
             </ul>
         </div>
         <div id="content">
-            <a th:href="@{/getBookBorrowHistory/selfHistory}">借阅记录查询</a>
-            <a th:href="@{/book/logout}">退出</a>
+
 
             <table border="1">
 

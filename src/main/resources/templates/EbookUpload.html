@@ -68,15 +68,11 @@
         <table border="1">
 
 
-            <form method="post" th:action="@{/book/uploadLog}" enctype="multipart/form-data">
+            <form method="post" th:action="@{/book/getEbookUpload}" enctype="multipart/form-data">
                 <div style="margin: 10% 40%;">
-                    图片：<input style="width:210px" type="file" name="uploadLog" />
+                    图片：<input style="width:210px" type="file" name="upload" />
                     <br><br>
-                    书籍编号：<input type="text" name="Code" />
-                    <br><br>
-                    图书名称：<input type="text" name="Name" />
-                    <br><br>
-                    书籍详情：<br><textarea name="Detail" cols="34" rows="15" ></textarea>
+                    图书名称：<input type="text" name="name"/>
                 </div>
                 <button style="margin-left: 65%;" type="submit" class="button">录入</button>
             </form>

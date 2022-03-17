@@ -1,7 +1,6 @@
 package com.yanxu.book.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.yanxu.book.aspect.LoginInAspect;
 import com.yanxu.book.entity.BookBorrowHistory;
 import com.yanxu.book.entity.User;
 import com.yanxu.book.mapper.BookBorrowHistoryMapper;
@@ -43,6 +42,7 @@ public class BookBorrowHistorySearchController {
         bookBorrowHistory.setBorrowingBookname(bookname);
         pageParam.setPageNum(pageNum);
         pageParam.setParam(bookBorrowHistory);
+        pageParam.setOrderBy("creat_time");
         PageInfo<BookBorrowHistory> pageInfo = bookBorrowHistoryService.page(pageParam);
         model.addAttribute("page", pageInfo);
         return "allHistory";

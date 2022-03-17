@@ -8,6 +8,12 @@ spring:
   mvc:
       static-path-pattern: /static/**
 
+  http:
+    multipart:
+      maxFileSize: 50Mb
+      maxRequestSize: 50Mb
+
+
   mail:
     #smtp服务主机  qq邮箱则为smtp.qq.com
     host: smtp.163.com
@@ -60,10 +66,10 @@ pagehelper:
   reasonable: true
   support-methods-arguments: true
 
-
-
-
-
+fdfs:
+  connect-timeout: 30  # 连接的超时时间
+  so-timeout: 1500  # 读取的超时时间
+  tracker-list: 192.168.114.130:22122  #tracker服务所在的ip地址和端口号
 
 
 

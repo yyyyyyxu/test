@@ -1,0 +1,114 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="referrer" content="no-referrer" />
+    <link rel="stylesheet" type="text/css" media="all" href="/static/css/style.css" th:href="@{/static/css/asd.css}"/>
+</head>
+
+<body>
+
+<div id="head">图书管理系统</div>
+<div>
+    <div id="list">
+        <ul>
+            <li>
+                <a th:href="@{/getBookBorrowHistory/allHistory}">
+                    <div>借阅记录查询</div>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/book/managerGetBorrowedBook}">
+                    <div>个人已借阅书籍查询</div>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/book/managerGetBookList}">
+                    <div>图书资源列表</div>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/book/insertBooks}">
+                    <div>插入新的图书</div>
+                </a>
+            </li>
+        </ul>
+        <ul>
+            <li>
+                <a th:href="@{/book/ebookUpload}">
+                    <div>上传电子书</div>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/book/ebookDownload}">
+                    <div>下载电子书</div>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/manager/setting}">
+                    <div>系统设置</div>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/book/logout}">
+                    <div>退出</div>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div id="content">
+
+
+        <table border="1">
+
+
+            <form method=get th:action="@{/book/userGetBookList}">
+                图书编码: <input type="text" name="bookCode" />
+                图书名称: <input type="text" name="bookName">
+                <button type="submit" class="button">查询</button>
+            </form>
+
+            <thead>
+            <tr>
+                <th>图书编码</th>
+                <th>图书名称</th>
+                <th>被借阅状态</th>
+                <th>图片</th>
+                <th>详情</th>
+            </tr>
+            </thead>
+
+            <tbody align="middle">
+            <tr th:each="book : ${page.list}">
+                <td th:text="${book.bookCode}"></td>
+                <td th:text="${book.bookName}"></td>
+                <td th:if="${book.flag}eq '0'" th:text="否"></td>
+                <td th:if="${book.flag}eq '1'" th:text="是"></td>
+                <td>
+                    <img th:src="@{'/bookpic/'+${book.bookCode}+'.png'}" height="250" width="250">
+                </td>
+                <td>
+                    <a th:href="@{/book/bookDetails?(bookCode=${book.bookCode})}">详情</a>
+                </td>
+            </tr>
+            <td colspan="9">
+                共<span th:text="${page.pages}" />页，<span th:text="${page.total }" />条记录
+                <a th:href="@{/book/getBookList?(num=1)}">首页</a>
+                <a th:if="${page.pageNum}!=1" th:href="@{/book/userGetBookList?(num=${page.pageNum}-1)}">上一页</a>
+                <a th:if="${page.pageNum}==1" th:href="@{/book/userGetBookList?num=1}">上一页</a>
+                <a th:if="${page.pageNum}!=${page.pages}"
+                   th:href="@{/book/userGetBookList?(num=${page.pageNum}+1)}">下一页</a>
+                第<span th:text="${page.pageNum }" />页
+                <a th:if="${page.pageNum}==${page.pages}"
+                   th:href="@{/book/userGetBookList?(num=${page.pages})}">下一页</a>
+                <a th:href="@{/book/userGetBookList?(num=${page.pages})}">尾页</a>
+            </td>
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+</body>
+
+</html>

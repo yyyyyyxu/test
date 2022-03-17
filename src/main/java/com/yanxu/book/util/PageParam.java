@@ -10,7 +10,7 @@ public class PageParam<T> implements IPage {
 
     private Integer pageNum = 1;
 
-    private Integer pageSize = 20;
+    private Integer pageSize = 10;
 
     private String orderBy;
 

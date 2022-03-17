@@ -6,10 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.yanxu.book.entity.Book;
 import com.yanxu.book.entity.User;
 import com.yanxu.book.mapper.BookMapper;
-import com.yanxu.book.service.BookInsertService;
-import com.yanxu.book.service.BookSearchService;
-import com.yanxu.book.service.BorrowBookService;
-import com.yanxu.book.service.HadToBorrowBooksService;
+import com.yanxu.book.service.*;
 import com.yanxu.book.util.PageParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,11 +46,13 @@ public class BookSearchController {
     @Autowired
     HadToBorrowBooksService hadToBorrowBooksService;
 
+    @Autowired
+    FdfsService fdfsService;
 
-    @RequestMapping("insertBook")
-    @ResponseBody
-    public void insert(@RequestBody List<Book> list) {
 
+    @RequestMapping("insertBooks")
+    public String insert() {
+          return "InsertBook";
     }
 
 
@@ -102,11 +101,11 @@ public class BookSearchController {
                 book.setImage(bytes);
                 bookMapper.update(book, new UpdateWrapper<Book>().lambda().eq(Book::getBookCode, code));
                 model.addAttribute("mag", new String("成功"));
-                return "forward:/book/getBookList";
+                return "forward:/book/insertBooks";
             } catch (IOException e) {
                 e.printStackTrace();
                 model.addAttribute("mag", new String("失败"));
-                return "forward:/book/getBookList";
+                return "forward:/book/insertBooks";
             } finally {
                 try {
                     bufferedInputStream.close();
@@ -116,7 +115,7 @@ public class BookSearchController {
             }
         } else {
             model.addAttribute("mag", new String("失败"));
-            return "forward:/book/getBookList";
+            return "forward:/book/insertBooks";
         }
     }
 
@@ -143,16 +142,44 @@ public class BookSearchController {
         return "succeed";
     }
 
-    @RequestMapping("getBorrowedBook")
-    public String getBorrowedBook(@RequestParam(required = false, defaultValue = "1") String num,HttpServletRequest request,Model model){
+    @RequestMapping("managerGetBorrowedBook")
+    public String managerGetBorrowedBook(@RequestParam(required = false, defaultValue = "1") String num,HttpServletRequest request,Model model){
         User user=(User) request.getSession().getAttribute("user");
         int pageNum = Integer.parseInt(num);
         pageParamUser.setPageNum(pageNum);
         pageParamUser.setParam(user);
         PageInfo<Book> pageInfo = hadToBorrowBooksService.page(pageParamUser);
         model.addAttribute("page", pageInfo);
-        return "SelfBorrowedBook";
+        return "ManagerGetBorrowedBook";
     }
 
+    @RequestMapping("userGetBorrowedBook")
+    public String userGetBorrowedBook(@RequestParam(required = false, defaultValue = "1") String num,HttpServletRequest request,Model model){
+        User user=(User) request.getSession().getAttribute("user");
+        int pageNum = Integer.parseInt(num);
+        pageParamUser.setPageNum(pageNum);
+        pageParamUser.setParam(user);
+        PageInfo<Book> pageInfo = hadToBorrowBooksService.page(pageParamUser);
+        model.addAttribute("page", pageInfo);
+        return "UserGetBorrowedBook";
+    }
+
+    @RequestMapping("ebookUpload")
+    public String ebookUpload(){
+        return "EbookUpload";
+    }
+
+    @PostMapping("getEbookUpload")
+    public String getEbookUpload(@RequestParam("upload") MultipartFile file, @RequestParam(value = "name",required = false) String name,Model model) {
+        try {
+            String url=fdfsService.upload(file,name);
+            System.out.println(url);
+            model.addAttribute("mag", new String("成功"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("mag", new String("失败"));
+        }
+        return "EbookUpload";
+    }
 
 }

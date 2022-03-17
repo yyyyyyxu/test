@@ -9,7 +9,7 @@ import java.util.List;
 public interface BasePageService<Param, Result>  {
     //分页查询
     default PageInfo<Result> page(PageParam<Param> param) {
-        return PageHelper.startPage(param.getPageNum(),param.getPageSize()).doSelectPageInfo(() -> list(param.getParam()));
+        return PageHelper.startPage(param.getPageNum(),param.getPageSize()).setOrderBy(param.getOrderBy()).doSelectPageInfo(() -> list(param.getParam()));
     }
 
     //集合查询

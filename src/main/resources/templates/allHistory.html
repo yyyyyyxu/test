@@ -17,7 +17,7 @@
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/book/getBorrowedBook}">
+                    <a th:href="@{/book/managerGetBorrowedBook}">
                         <div>个人已借阅书籍查询</div>
                     </a>
                 </li>
@@ -27,25 +27,25 @@
                     </a>
                 </li>
                 <li>
-                    <a href="javascript:;">
-                        <div>123456789</div>
+                    <a th:href="@{/book/insertBooks}">
+                        <div>插入新的图书</div>
                     </a>
                 </li>
             </ul>
             <ul>
                 <li>
-                    <a href="javascript:;">
-                        <div>123456789</div>
+                    <a th:href="@{/book/ebookUpload}">
+                        <div>上传电子书</div>
                     </a>
                 </li>
                 <li>
-                    <a href="javascript:;">
-                        <div>123456789</div>
+                    <a th:href="@{/book/ebookDownload}">
+                        <div>下载电子书</div>
                     </a>
                 </li>
                 <li>
-                    <a href="javascript:;">
-                        <div>123456789</div>
+                    <a th:href="@{/manager/setting}">
+                        <div>系统设置</div>
                     </a>
                 </li>
                 <li>
@@ -84,15 +84,14 @@
                         <td th:text="${#dates.format(bookBorrowHistory.creatTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
                     </tr>
                     <td colspan="9">
-                        <div style="margin-top: 70%;">
                         共<span th:text="${page.pages}"/>页，<span th:text="${page.total }"/>条记录
-                        <a th:href="@{/getBookBorrowHistory/selfHistory?(num=1)}">首页</a>
-                        <a th:if="${page.pageNum}!=1" th:href="@{/getBookBorrowHistory/selfHistory?(num=${page.pageNum}-1)}">上一页</a>
-                        <a th:if="${page.pageNum}==1" th:href="@{/getBookBorrowHistory/selfHistory?num=1}">上一页</a>
-                        <a th:if="${page.pageNum}!=${page.pages}" th:href="@{/getBookBorrowHistory/selfHistory?(num=${page.pageNum}+1)}">下一页</a>
+                        <a th:href="@{/getBookBorrowHistory/allHistory?(num=1)}">首页</a>
+                        <a th:if="${page.pageNum}!=1" th:href="@{/getBookBorrowHistory/allHistory?(num=${page.pageNum}-1)}">上一页</a>
+                        <a th:if="${page.pageNum}==1" th:href="@{/getBookBorrowHistory/allHistory?num=1}">上一页</a>
+                        <a th:if="${page.pageNum}!=${page.pages}" th:href="@{/getBookBorrowHistory/allHistory?(num=${page.pageNum}+1)}">下一页</a>
                         第<span th:text="${page.pageNum }"/>页
-                        <a th:if="${page.pageNum}==${page.pages}" th:href="@{/getBookBorrowHistory/selfHistory?(num=${page.pages})}">下一页</a>
-                        <a th:href="@{/getBookBorrowHistory/selfHistory?(num=${page.pages})}">尾页</a>
+                        <a th:if="${page.pageNum}==${page.pages}" th:href="@{/getBookBorrowHistory/allHistory?(num=${page.pages})}">下一页</a>
+                        <a th:href="@{/getBookBorrowHistory/allHistory?(num=${page.pages})}">尾页</a>
                         </div>
                     </td>
             

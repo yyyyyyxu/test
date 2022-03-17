@@ -16,7 +16,7 @@
                 </a>
             </li>
             <li>
-                <a th:href="@{/book/getBorrowedBook}">
+                <a th:href="@{/book/managerGetBorrowedBook}">
                     <div>个人已借阅书籍查询</div>
                 </a>
             </li>
@@ -26,20 +26,20 @@
                 </a>
             </li>
             <li>
-                <a href="javascript:;">
-                    <div>123456789</div>
+                <a th:href="@{/book/insertBooks}">
+                    <div>插入新的图书</div>
                 </a>
             </li>
         </ul>
         <ul>
             <li>
-                <a href="javascript:;">
-                    <div>123456789</div>
+                <a th:href="@{/book/ebookUpload}">
+                    <div>上传电子书</div>
                 </a>
             </li>
             <li>
-                <a href="javascript:;">
-                    <div>123456789</div>
+                <a th:href="@{/book/ebookDownload}">
+                    <div>下载电子书</div>
                 </a>
             </li>
             <li>
@@ -63,6 +63,7 @@
                 <tr>
                     <th>图书编码</th>
                     <th>图书名称</th>
+                    <th>被借阅状态</th>
                     <th>图片</th>
                     <th>详情</th>
                 </tr>
@@ -72,6 +73,8 @@
                 <tr th:each="book : ${page.list}">
                     <td th:text="${book.bookCode}"></td>
                     <td th:text="${book.bookName}"></td>
+                    <td th:if="${book.flag}eq '0'" th:text="否"></td>
+                    <td th:if="${book.flag}eq '1'" th:text="是"></td>
                     <td>
                         <img th:src="@{'/bookpic/'+${book.bookCode}+'.png'}" height="250" width="250" />
                     </td>

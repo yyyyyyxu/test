@@ -1,40 +1,85 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="referrer" content="no-referrer"/>
+    <meta name="referrer" content="no-referrer" />
+    <link rel="stylesheet" type="text/css" media="all" href="/static/css/style.css" th:href="@{/static/css/asd.css}"/>
 </head>
+
+
+
 <body>
-    <div>
-        <form method="get" th:action="@{/manager/settingSave?parameterName=loginHistoryTask}">
-            <input value="">
-            登录历史记录保存天数:<input type="text" name="parameterValue">
-            <button type="submit" class="button">保存</button>
-        </form>
+<div id="head">图书管理系统</div>
+<div id="list">
+    <ul>
+        <li>
+            <a th:href="@{/getBookBorrowHistory/allHistory}">
+                <div>借阅记录查询</div>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/book/managerGetBorrowedBook}">
+                <div>个人已借阅书籍查询</div>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/book/managerGetBookList}">
+                <div>图书资源列表</div>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/book/insertBooks}">
+                <div>插入新的图书</div>
+            </a>
+        </li>
+    </ul>
+    <ul>
+        <li>
+            <a th:href="@{/book/ebookUpload}">
+                <div>上传电子书</div>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/book/ebookDownload}">
+                <div>下载电子书</div>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/manager/setting}">
+                <div>系统设置</div>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/book/logout}">
+                <div>退出</div>
+            </a>
+        </li>
+    </ul>
+</div>
 
-        <form method="get" th:action="@{/manager/settingSave?(parameterName=loginHistoryTask)}">
-            登录历史记录保存天数:<input type="text" name="parameterValue">
-            <button type="submit" class="button">保存</button>
-        </form>
 
-        <form method="get" th:action="@{/manager/settingSave?(parameterName=loginHistoryTask)}">
-            登录历史记录保存天数:<input type="text" name="parameterValue">
-            <button type="submit" class="button">保存</button>
-        </form>
+<div id="content">
 
-        <form method="get" th:action="@{/manager/settingSave?(parameterName=loginHistoryTask)}">
-            登录历史记录保存天数:<input type="text" name="parameterValue">
-            <button type="submit" class="button">保存</button>
-        </form>
 
-        <form method="get" th:action="@{/manager/settingSave?(parameterName=loginHistoryTask)}">
-            登录历史记录保存天数:<input type="text" name="parameterValue">
-            <button type="submit" class="button">保存</button>
-        </form>
+    <form method="get" th:action="@{/manager/settingSave}">
+        登录历史记录保存天数:<input type="text" name="parameterValue">
+        <input hidden type="text" name="parameterName" value="loginHistoryTask">
+        <button type="submit" class="button">保存</button>
+    </form>
 
-        <form method="get" th:action="@{/manager/settingSave?(parameterName=loginHistoryTask)}">
-            登录历史记录保存天数:<input type="text" name="parameterValue">
-            <button type="submit" class="button">保存</button>
-        </form>
-    </div>
+    <form method="get" th:action="@{/manager/settingSave}">
+        借阅历史记录保存天数:<input type="text" name="parameterValue">
+        <input hidden type="text" name="parameterName" value="borrowHistoryTask">
+        <button type="submit" class="button">保存</button>
+    </form>
+
+    <form method="get" th:action="@{/manager/settingSave}">
+        图书将要到期前:<input type="text" name="parameterValue">天提醒
+        <input hidden type="text" name="parameterName" value="remindReturnBookTask">
+        <button type="submit" class="button">保存</button>
+    </form>
+
+
+</div>
 </body>
 </html>

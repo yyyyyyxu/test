@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -154,32 +155,14 @@ public class BookSearchController {
     }
 
     @RequestMapping("userGetBorrowedBook")
-    public String userGetBorrowedBook(@RequestParam(required = false, defaultValue = "1") String num,HttpServletRequest request,Model model){
-        User user=(User) request.getSession().getAttribute("user");
+    public String userGetBorrowedBook(@RequestParam(required = false, defaultValue = "1") String num,HttpServletRequest request,Model model) {
+        User user = (User) request.getSession().getAttribute("user");
         int pageNum = Integer.parseInt(num);
         pageParamUser.setPageNum(pageNum);
         pageParamUser.setParam(user);
         PageInfo<Book> pageInfo = hadToBorrowBooksService.page(pageParamUser);
         model.addAttribute("page", pageInfo);
         return "UserGetBorrowedBook";
-    }
-
-    @RequestMapping("ebookUpload")
-    public String ebookUpload(){
-        return "EbookUpload";
-    }
-
-    @PostMapping("getEbookUpload")
-    public String getEbookUpload(@RequestParam("upload") MultipartFile file, @RequestParam(value = "name",required = false) String name,Model model) {
-        try {
-            String url=fdfsService.upload(file,name);
-            System.out.println(url);
-            model.addAttribute("mag", new String("成功"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            model.addAttribute("mag", new String("失败"));
-        }
-        return "EbookUpload";
     }
 
 }

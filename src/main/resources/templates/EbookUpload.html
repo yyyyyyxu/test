@@ -41,12 +41,12 @@
         </ul>
         <ul>
             <li>
-                <a th:href="@{/book/ebookUpload}">
+                <a th:href="@{/ebook/ebookUpload}">
                     <div>上传电子书</div>
                 </a>
             </li>
             <li>
-                <a th:href="@{/book/ebookDownload}">
+                <a th:href="@{/ebook/getEbook}">
                     <div>下载电子书</div>
                 </a>
             </li>
@@ -68,7 +68,7 @@
         <table border="1">
 
 
-            <form method="post" th:action="@{/book/getEbookUpload}" enctype="multipart/form-data">
+            <form method="post" th:action="@{/ebook/getEbookUpload}" enctype="multipart/form-data">
                 <div style="margin: 10% 40%;">
                     图片：<input style="width:210px" type="file" name="upload" />
                     <br><br>

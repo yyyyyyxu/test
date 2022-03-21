@@ -7,20 +7,13 @@
 </head>
 
 <body>
-<div align="middle">
-
-
-
-</div>
-
-
 <div id="head">图书管理系统</div>
 <div>
     <div id="list">
         <ul>
             <li>
                 <a th:href="@{/getBookBorrowHistory/allHistory}">
-                    <div>个人借阅记录查询</div>
+                    <div>借阅记录查询</div>
                 </a>
             </li>
             <li>
@@ -65,29 +58,47 @@
     <div id="content">
 
 
+
         <table border="1">
 
 
-            <form method="post" th:action="@{/book/uploadLog}" enctype="multipart/form-data">
-                <div style="margin: 10% 40%;">
-                    图片：<input style="width:210px" type="file" name="uploadLog" />
-                    <br><br>
-                    书籍编号：<input type="text" name="Code" />
-                    <br><br>
-                    图书名称：<input type="text" name="Name" />
-                    <br><br>
-                    书籍详情：<br><textarea name="Detail" cols="34" rows="15" ></textarea>
-                </div>
-                <button style="margin-left: 65%;" type="submit" class="button">录入</button>
+            <form method=get th:action="@{/ebook/getEbook}">
+                图书名称: <input type="text" name="name">
+                <button type="submit" class="button">查询</button>
             </form>
-            <span th:text="${mag}"></span>
 
-        </table>
+            <thead>
+            <tr>
+                <th>图书名称</th>
+                <th>下载</th>
+            </tr>
+            </thead>
+
+            <tbody align="middle">
+            <tr th:each="ebook : ${page.list}">
+                <td th:text="${ebook.ebookName}"></td>
+                <td>
+                    <a th:href="@{/ebook/download?(name=${ebook.ebookName})}">下载</a>
+                </td>
+            </tr>
+            <td colspan="9">
+                共<span th:text="${page.pages}"/>页，<span th:text="${page.total }"/>条记录
+                <a th:href="@{/ebook/getEbook?(num=1)}">首页</a>
+                <a th:if="${page.pageNum}!=1" th:href="@{/ebook/getEbook?(num=${page.pageNum}-1)}">上一页</a>
+                <a th:if="${page.pageNum}==1" th:href="@{/ebook/getEbook?num=1}">上一页</a>
+                <a th:if="${page.pageNum}!=${page.pages}" th:href="@{/ebook/getEbook?(num=${page.pageNum}+1)}">下一页</a>
+                第<span th:text="${page.pageNum }"/>页
+                <a th:if="${page.pageNum}==${page.pages}" th:href="@{/ebook/getEbook?(num=${page.pages})}">下一页</a>
+                <a th:href="@{/ebook/getEbook?(num=${page.pages})}">尾页</a>
     </div>
+    </td>
+
+    </tbody>
+
+    </table>
+
 </div>
-
-
-
+</div>
 </body>
 
 </html>

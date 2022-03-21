@@ -18,13 +18,12 @@ import java.util.concurrent.ScheduledFuture;
 @Component
 public class TaskScheduleService {
 
-    @Autowired
-    SettingMapper settingMapper;
+
 
     static ConcurrentHashMap<String, ScheduledFuture> container = new ConcurrentHashMap<>();
 
 
-    public void start() {
+    public  void start() {
         AbstractApplicationContext ac = (AbstractApplicationContext) SpringContextUtil.getApplicationContext();
         SettingMapper settingMapper = ac.getBean(SettingMapper.class);
         if (ThreadPoolUtil.getRunnableList().size() != 0) {

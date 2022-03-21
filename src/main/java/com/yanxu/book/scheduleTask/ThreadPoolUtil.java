@@ -3,6 +3,7 @@ package com.yanxu.book.scheduleTask;
 import com.yanxu.book.scheduleTask.task.imp.BorrowHistoryTaskImp;
 import com.yanxu.book.scheduleTask.task.Task;
 import com.yanxu.book.scheduleTask.task.imp.RemindReturnBookTaskImp;
+import com.yanxu.book.scheduleTask.task.imp.TheUserToUnlockTaskImp;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class ThreadPoolUtil {
 
     private static volatile ThreadPoolTaskScheduler threadPoolTaskScheduler;
 
-    private static volatile List<Task> taskList = new ArrayList<>();
+    private static List<Task> taskList = new ArrayList<>();
 
     public static ThreadPoolTaskScheduler getInstance() {
         if (threadPoolTaskScheduler == null) {
@@ -38,7 +39,7 @@ public class ThreadPoolUtil {
 
     static {
 //        taskList.add(BorrowHistoryTaskImp.getBorrowHistoryTask());
-        taskList.add(RemindReturnBookTaskImp.getRemindReturnBookTask());
+        taskList.add(TheUserToUnlockTaskImp.getTheUserToUnlockTask());
     }
 }
 

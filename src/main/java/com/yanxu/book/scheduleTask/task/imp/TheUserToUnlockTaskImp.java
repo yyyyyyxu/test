@@ -20,30 +20,30 @@ import java.util.List;
 
 @Data
 @Component
-public class RefusedToLoginTaskImp implements Task {
+public class TheUserToUnlockTaskImp implements Task {
 
 
     private String taskName;
 
     private String taskCode = "16";
 
-    private static RefusedToLoginTaskImp refusedToLoginTaskImp;
+    private static TheUserToUnlockTaskImp theUserToUnlockTask;
 
-    public static RefusedToLoginTaskImp getRefusedToLoginTask() {
-        if (refusedToLoginTaskImp == null) {
-            synchronized (OverdueReturnBookTaskImp.class) {
-                if (refusedToLoginTaskImp == null) {
-                    refusedToLoginTaskImp = new RefusedToLoginTaskImp();
-                    refusedToLoginTaskImp.setTaskName("RefusedToLoginTask");
+    public static TheUserToUnlockTaskImp getRefusedToLoginTask() {
+        if (theUserToUnlockTask == null) {
+            synchronized (TheUserToUnlockTaskImp.class) {
+                if (theUserToUnlockTask == null) {
+                    theUserToUnlockTask = new TheUserToUnlockTaskImp();
+                    theUserToUnlockTask.setTaskName("TheUserToUnlockTask");
                 }
             }
         }
-        return refusedToLoginTaskImp;
+        return theUserToUnlockTask;
     }
 
     @Override
     public Task getInstance() {
-        return RefusedToLoginTaskImp.getRefusedToLoginTask();
+        return TheUserToUnlockTaskImp.getRefusedToLoginTask();
     }
 
     @Override
@@ -63,7 +63,7 @@ public class RefusedToLoginTaskImp implements Task {
         UserMapper userMapper=ac.getBean(UserMapper.class);
         UserLoginService userLoginService=ac.getBean(UserLoginServiceImp.class);
 
-        Setting setting=settingMapper.selectOne(new QueryWrapper<Setting>().lambda().eq(Setting::getParameterName, ParameterCodeEnum.REFUSED_TOLOGIN.getParameterName()).eq(Setting::getParameterCode,ParameterCodeEnum.REFUSED_TOLOGIN.getParameterCode()));
+        Setting setting=settingMapper.selectOne(new QueryWrapper<Setting>().lambda().eq(Setting::getParameterName, ParameterCodeEnum.THE_USER_TO_UNLOCK_TASK_RETAIN.getParameterName()).eq(Setting::getParameterCode,ParameterCodeEnum.THE_USER_TO_UNLOCK_TASK_RETAIN.getParameterCode()));
         int minute=Integer.parseInt(setting.getParameterValue());
 
         Calendar calendar=Calendar.getInstance();

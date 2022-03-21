@@ -10,8 +10,7 @@ public enum ParameterCodeEnum {
     BORROW_HISTORY_TASK_RETAIN("2", "borrowHistoryTask"),
     REMIND_RETURNBOOK_TASK_RETAIN("3", "remindReturnBookTask"),
     OVERDUE_RETURNBOOK_TASK_RETAIN("4","overdueReturnBookTask"),
-
-
+    THE_USER_TO_UNLOCK_TASK_RETAIN("5","theUserToUnlockTask"),
     /**
      * 逾期还书多少次不能再次借阅
      */

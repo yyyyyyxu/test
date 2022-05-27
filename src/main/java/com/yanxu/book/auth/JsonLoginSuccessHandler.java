@@ -1,5 +1,6 @@
 package com.yanxu.book.auth;
 
+import com.yanxu.book.cache.UserInfoCache;
 import com.yanxu.book.entity.User;
 import com.yanxu.book.service.impl.UserLoginServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.security.Principal;
 import java.util.Set;
 
 public class JsonLoginSuccessHandler implements AuthenticationSuccessHandler {
@@ -37,7 +37,8 @@ public class JsonLoginSuccessHandler implements AuthenticationSuccessHandler {
             String[] strings=s.split(";");
             String[] userName=strings[0].split(":");
             User user=new User();
-            user.setUserId(userName[2].trim());
+            user.setUserName(userName[2].trim());
+            UserInfoCache.map.put("name",userName[2].trim());
             request.getSession().setAttribute("user",user);
             return;
         }
@@ -45,7 +46,8 @@ public class JsonLoginSuccessHandler implements AuthenticationSuccessHandler {
         String[] strings=s.split(";");
         String[] userName=strings[0].split(":");
         User user=new User();
-        user.setUserId(userName[2].trim());
+        UserInfoCache.map.put("name",userName[2].trim());
+        user.setUserName(userName[2].trim());
         request.getSession().setAttribute("user",user);
         response.sendRedirect(basePath + "book/userGetBookList");
     }

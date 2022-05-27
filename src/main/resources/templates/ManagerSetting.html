@@ -50,6 +50,11 @@
             </a>
         </li>
         <li>
+            <a th:href="@{/password/toUpdate}">
+                <div>修改密码</div>
+            </a>
+        </li>
+        <li>
             <a th:href="@{/book/logout}">
                 <div>退出</div>
             </a>
@@ -79,7 +84,29 @@
         <button type="submit" class="button">保存</button>
     </form>
 
+    <form method="get" th:action="@{/manager/settingSave}">
+        图书逾期间提醒cron表达式:<input type="text" name="parameterValue">
+        <input hidden type="text" name="parameterName" value="overdueReturnBookTask">
+        <button type="submit" class="button">保存</button>
+    </form>
 
+    <form method="get" th:action="@{/manager/settingSave}">
+        账户锁定时间(分钟):<input type="text" name="parameterValue">
+        <input hidden type="text" name="parameterName" value="theUserToUnlockTask">
+        <button type="submit" class="button">保存</button>
+    </form>
+
+    <form method="get" th:action="@{/manager/settingSave}">
+        最大失败次数:<input type="text" name="parameterValue">
+        <input hidden type="text" name="parameterName" value="refusedToLogin">
+        <button type="submit" class="button">保存</button>
+    </form>
+
+    <form method="get" th:action="@{/manager/settingSave}">
+        逾期禁止借阅次数:<input type="text" name="parameterValue">
+        <input hidden type="text" name="parameterName" value="refusedToBorrow">
+        <button type="submit" class="button">保存</button>
+    </form>
 </div>
 </body>
 </html>

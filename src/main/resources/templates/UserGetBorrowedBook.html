@@ -9,51 +9,38 @@
 <body>
     <div id="head">图书管理系统</div>
     <div>
-        <div id="list">
-            <ul>
-                <li>
-                    <a th:href="@{/getBookBorrowHistory/selfHistory}">
-                        <div>个人借阅记录查询</div>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/book/userGetBorrowedBook}">
-                        <div>个人已借阅书籍查询</div>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:;">
-                        <div>123456789</div>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:;">
-                        <div>123456789</div>
-                    </a>
-                </li>
-            </ul>
-            <ul>
-                <li>
-                    <a href="javascript:;">
-                        <div>123456789</div>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:;">
-                        <div>123456789</div>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:;">
-                        <div>123456789</div>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/book/logout}">
-                        <div>退出</div>
-                    </a>
-                </li>
-            </ul>
+        <div id="list"><ul>
+            <li>
+                <a th:href="@{/getBookBorrowHistory/selfHistory}">
+                    <div>个人借阅记录查询</div>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/book/userGetBorrowedBook}">
+                    <div>个人已借阅书籍查询</div>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/book/userGetBookList}">
+                    <div>图书资源列表</div>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/ebook/UserGetEbook}">
+                    <div>下载电子书</div>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/password/toUserUpdate}">
+                    <div>修改密码</div>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/book/logout}">
+                    <div>退出</div>
+                </a>
+            </li>
+        </ul>
         </div>
         <div id="content">
 

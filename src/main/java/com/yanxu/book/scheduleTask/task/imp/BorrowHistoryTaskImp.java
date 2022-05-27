@@ -1,6 +1,7 @@
 package com.yanxu.book.scheduleTask.task.imp;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yanxu.book.config.SpringContextUtil;
 import com.yanxu.book.entity.BookBorrowHistory;
 import com.yanxu.book.entity.Setting;
 import com.yanxu.book.entity.UserLoginHistory;
@@ -11,7 +12,9 @@ import com.yanxu.book.service.BookBorrowHistoryService;
 import com.yanxu.book.settingEnum.ParameterCodeEnum;
 import com.yanxu.book.util.DateFormatUtil;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
@@ -21,6 +24,7 @@ import java.util.stream.Collectors;
 
 @Data
 @Component
+@Slf4j
 public class BorrowHistoryTaskImp implements Task {
 
     @Autowired
@@ -36,14 +40,14 @@ public class BorrowHistoryTaskImp implements Task {
 
     private String taskName;
 
-    private String taskCode="1";
+    private String taskCode="2";
 
     public static BorrowHistoryTaskImp getBorrowHistoryTask() {
         if (borrowHistoryTask == null) {
             synchronized (BorrowHistoryTaskImp.class) {
                 if (borrowHistoryTask == null) {
                     borrowHistoryTask = new BorrowHistoryTaskImp();
-                    borrowHistoryTask.setTaskName("BorrowHistoryTask");
+                    borrowHistoryTask.setTaskName("borrowHistoryTask");
                 }
             }
         }
@@ -52,16 +56,21 @@ public class BorrowHistoryTaskImp implements Task {
 
     @Override
     public void run() {
+        log.info("BorrowHistoryTask start");
+        AbstractApplicationContext ac = (AbstractApplicationContext) SpringContextUtil.getApplicationContext();
+        SettingMapper settingMapper = ac.getBean(SettingMapper.class);
+        BookBorrowHistoryMapper bookBorrowHistoryMapper = ac.getBean(BookBorrowHistoryMapper.class);
         Setting setting=settingMapper.selectOne(new QueryWrapper<Setting>().lambda().eq(Setting::getParameterCode, ParameterCodeEnum.BORROW_HISTORY_TASK_RETAIN.getParameterCode()).
                 eq(Setting::getParameterName,ParameterCodeEnum.BORROW_HISTORY_TASK_RETAIN.getParameterName()));
-
         Date date=new Date();
         String nowFormat= DateFormatUtil.LongStringFormat(date);
         Calendar calendar=Calendar.getInstance();
         calendar.add(Calendar.DATE,-Integer.valueOf(setting.getParameterValue()));
         List<BookBorrowHistory> borrowHistories=bookBorrowHistoryMapper.selectList(new QueryWrapper<BookBorrowHistory>().lambda().le(BookBorrowHistory::getCreatTime,calendar.getTime()));
-        List<Integer> id=borrowHistories.stream().map(x-> Integer.valueOf(x.getID())).collect(Collectors.toList());
-        bookBorrowHistoryService.removeByIds(id);
+        List<String> id=borrowHistories.stream().map(x-> x.getID()).collect(Collectors.toList());
+        if (!id.isEmpty()){
+            bookBorrowHistoryMapper.deleteBatchIds(id);
+        }
     }
 
     @Override
@@ -76,6 +85,6 @@ public class BorrowHistoryTaskImp implements Task {
 
     @Override
     public String getCode() {
-        return null;
+        return taskCode;
     }
 }

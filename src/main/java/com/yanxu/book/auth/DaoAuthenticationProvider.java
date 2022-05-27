@@ -1,20 +1,19 @@
 package com.yanxu.book.auth;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.yanxu.book.entity.LoginFailureHistory;
 import com.yanxu.book.entity.Setting;
 import com.yanxu.book.entity.User;
 import com.yanxu.book.mapper.SettingMapper;
 import com.yanxu.book.mapper.UserLoginFailureHistoryMapper;
 import com.yanxu.book.mapper.UserMapper;
-import com.yanxu.book.service.UserLoginService;
 import com.yanxu.book.settingEnum.ParameterCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -47,7 +46,7 @@ public class DaoAuthenticationProvider extends AbstractBookUserDetailsAuthentica
 
     @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
-        User user=userMapper.selectOne(new QueryWrapper<User>().lambda().eq(User::getUserId,authentication.getPrincipal()));
+        User user=userMapper.selectOne(new QueryWrapper<User>().lambda().eq(User::getUserName,authentication.getPrincipal()));
         int faultTime=user.getFaultTime();
         Setting setting=settingMapper.selectOne(new QueryWrapper<Setting>().lambda().eq(Setting::getParameterCode, ParameterCodeEnum.REFUSED_TOLOGIN.getParameterCode())
                 .eq(Setting::getParameterName,ParameterCodeEnum.REFUSED_TOLOGIN.getParameterName()));
@@ -70,12 +69,19 @@ public class DaoAuthenticationProvider extends AbstractBookUserDetailsAuthentica
 
             String presentedPassword = authentication.getCredentials().toString();
             if (!this.passwordEncoder.matches(presentedPassword, userDetails.getPassword())) {
-                if (faultTime>=refusedToLogin){
+
+                if (faultTime+1>=refusedToLogin){
+                    user.setFaultTime(user.getFaultTime()+1);
+                    userMapper.update(user,new UpdateWrapper<User>().lambda().eq(User::getUserName,authentication.getPrincipal()));
+                    LoginFailureHistory loginFailureHistory = new LoginFailureHistory();
+                    loginFailureHistory.setUserName(userDetails.getUsername());
+                    loginFailureHistory.setCreatTime(new Date());
+                    mapper.insert(loginFailureHistory);
+                    this.logger.debug("Authentication failed: password does not match stored value");
                     throw new LockedException("失败次数过多已锁定");
                 }
-                User user1=new User();
-                user1.setFaultTime(user.getFaultTime()+1);
-                userMapper.update(user1,new QueryWrapper<User>().lambda().eq(User::getUserId,authentication.getPrincipal()));
+                user.setFaultTime(user.getFaultTime()+1);
+                userMapper.update(user,new UpdateWrapper<User>().lambda().eq(User::getUserName,authentication.getPrincipal()));
                 LoginFailureHistory loginFailureHistory = new LoginFailureHistory();
                 loginFailureHistory.setUserName(userDetails.getUsername());
                 loginFailureHistory.setCreatTime(new Date());
@@ -84,6 +90,8 @@ public class DaoAuthenticationProvider extends AbstractBookUserDetailsAuthentica
                 throw new BadCredentialsException(this.messages.getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "密码错误"));
             }else if (faultTime>=refusedToLogin){
                 throw new LockedException("失败次数过多已锁定");
+            }else {user.setFaultTime(0);
+                userMapper.update(user,new UpdateWrapper<User>().lambda().eq(User::getUserName,authentication.getPrincipal()));
             }
         }
     }

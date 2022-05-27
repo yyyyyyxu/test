@@ -23,8 +23,8 @@ public class Book implements Serializable {
     @TableField("book_name")
     private String bookName;
 
-    @TableField("user_id")
-    private String userId;
+    @TableField("user_name")
+    private String userName;
 
     //0-没人借阅 1-有人借阅
     private String flag;

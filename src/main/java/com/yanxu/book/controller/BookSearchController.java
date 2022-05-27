@@ -8,6 +8,7 @@ import com.yanxu.book.entity.User;
 import com.yanxu.book.mapper.BookMapper;
 import com.yanxu.book.service.*;
 import com.yanxu.book.util.PageParam;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -75,8 +76,12 @@ public class BookSearchController {
     public String managerGetBookList(@RequestParam(required = false,value = "name") String name,@RequestParam(required = false, defaultValue = "1") String num, String bookName, String bookCode, Model model,HttpServletRequest request) {
         int pageNum = Integer.parseInt(num);
         Book book = new Book();
-        book.setBookCode(bookCode);
-        book.setBookName(bookName);
+        if (org.apache.commons.lang3.StringUtils.isNotEmpty(bookCode)){
+            book.setBookCode(bookCode.trim());
+        }
+        if (org.apache.commons.lang3.StringUtils.isNotEmpty(bookName)){
+            book.setBookName(bookName.trim());
+        }
         pageParamBook.setPageNum(pageNum);
         pageParamBook.setParam(book);
         PageInfo<Book> pageInfo = bookSearchService.page(pageParamBook);
@@ -84,10 +89,34 @@ public class BookSearchController {
         request.getSession().setAttribute("name",name);
         return "ManagerGetBookList";
     }
+//
+//    @GetMapping(value = "/download")
+//    public void downloadFilesWithFastdfs(@PathVariable String id,HttpServletResponse httpServletResponse) throws MalformedURLException {
+//        //操作数据库，读取文件上传时的信息
+//            try {
+//                String fileName =i
+//                String fileUrl = fileInfo.getFileUrl();
+//                String filepath = fileUrl.substring(fileUrl.lastIndexOf("group1/")+7);
+//                DownloadByteArray callback = new DownloadByteArray();
+//                byte[] b = fastFileStorageClient.downloadFile("group1", filepath,callback);
+//                httpServletResponse.reset();
+//                httpServletResponse.setContentType("application/x-download");
+//                httpServletResponse.addHeader("Content-Disposition" ,"attachment;filename=\"" +fileName+ "\"");
+//                httpServletResponse.getOutputStream().write(b);
+//                service.updateDownloadCount(id);
+//                httpServletResponse.getOutputStream().close();
+//
+//
+//            }
+//            catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
 
     @PostMapping("uploadLog")
-    public String uploadLog(@RequestParam("uploadLog") MultipartFile file, @RequestParam(value = "Code",required = false) String code,Model model) {
+    public String uploadLog(@RequestParam("uploadLog") MultipartFile file, @RequestParam(value = "Code",required = false) String code,@RequestParam(value = "Name",required = false) String name,@RequestParam(value = "Detail" ,required= false) String detail,Model model) {
 
         BufferedInputStream bufferedInputStream = null;
         BufferedOutputStream bufferedOutputStream = null;
@@ -100,7 +129,11 @@ public class BookSearchController {
 
                 Book book = new Book();
                 book.setImage(bytes);
-                bookMapper.update(book, new UpdateWrapper<Book>().lambda().eq(Book::getBookCode, code));
+                book.setBookCode(code);
+                book.setBookName(name);
+                book.setBookDetail(detail);
+                book.setFlag("0");
+                bookMapper.insert(book);
                 model.addAttribute("mag", new String("成功"));
                 return "forward:/book/insertBooks";
             } catch (IOException e) {
@@ -128,6 +161,17 @@ public class BookSearchController {
         model.addAttribute("bookCode",book.getBookCode());
         model.addAttribute("bookFlag",book.getFlag());
         return "BookDetail";
+    }
+
+
+    @GetMapping("userBookDetails")
+    public String userBookDetails(String bookCode,Model model){
+        Book book = bookMapper.selectOne(new QueryWrapper<Book>().lambda().eq(Book::getBookCode,bookCode));
+        model.addAttribute("bookName",book.getBookName());
+        model.addAttribute("bookDetail",book.getBookDetail());
+        model.addAttribute("bookCode",book.getBookCode());
+        model.addAttribute("bookFlag",book.getFlag());
+        return "userBookDetail";
     }
 
     @RequestMapping("borrowBook")

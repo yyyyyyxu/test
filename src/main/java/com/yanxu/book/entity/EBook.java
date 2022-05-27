@@ -8,12 +8,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Date;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @TableName("ebook")
+@Data
 public class EBook implements Serializable {
+
     private static final long serialVersionUID = 4018806646911947180L;
 
     @TableField("ebook_name")

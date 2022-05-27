@@ -15,8 +15,8 @@ public class User implements Serializable {
     @TableId(value = "ID", type = IdType.ASSIGN_UUID)
     private String id;
 
-    @TableField("user_id")
-    private String userId;
+    @TableField("user_name")
+    private String userName;
 
     @TableField("pass_word")
     private String passWord;

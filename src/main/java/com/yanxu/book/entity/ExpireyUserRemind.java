@@ -15,7 +15,7 @@ public class ExpireyUserRemind {
 
     private String email;
 
-    private String userId;
+    private String userName;
 
     private int overdueTime;
 

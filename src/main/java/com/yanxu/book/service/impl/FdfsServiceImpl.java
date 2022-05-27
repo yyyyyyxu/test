@@ -1,7 +1,6 @@
 package com.yanxu.book.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.github.tobato.fastdfs.domain.fdfs.FileInfo;
 import com.github.tobato.fastdfs.domain.fdfs.StorePath;
 import com.github.tobato.fastdfs.domain.proto.storage.DownloadByteArray;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.net.URLEncoder;
 
 @Service
 public class FdfsServiceImpl implements FdfsService {
@@ -28,8 +26,8 @@ public class FdfsServiceImpl implements FdfsService {
     @Override
     public String upload(MultipartFile file, String fileExtName) throws Exception {
 
-        StorePath storePath = fastFileStorageClient.uploadFile(file.getInputStream(), file.getSize(),fileExtName, null);
-        EBook eBook=new EBook();
+        StorePath storePath = fastFileStorageClient.uploadFile(file.getInputStream(), file.getSize(), fileExtName, null);
+        EBook eBook = new EBook();
         eBook.setEbookName(fileExtName);
         eBook.setFileGroup(storePath.getGroup());
         eBook.setFileUrl(storePath.getPath());
@@ -39,22 +37,21 @@ public class FdfsServiceImpl implements FdfsService {
     }
 
     @Override
-    public void download(String name,HttpServletResponse httpServletResponse) throws Exception{
+    public void download(String name, HttpServletResponse httpServletResponse) throws Exception {
 
         try {
-            EBook eBook=eBookMapper.selectOne(new QueryWrapper<EBook>().lambda().eq(EBook::getEbookName,name));
-                    String fileName=eBook.getEbookName();
-                    DownloadByteArray callback = new DownloadByteArray();
-                    byte[] b = fastFileStorageClient.downloadFile(eBook.getFileGroup(), eBook.getFileUrl(),callback);
-                    httpServletResponse.reset();
-                    httpServletResponse.setContentType("application/x-download");
-                    httpServletResponse.addHeader("Content-Disposition" ,"attachment;filename=\"" +fileName+ "\"");
-                    httpServletResponse.getOutputStream().write(b);
-                    httpServletResponse.getOutputStream().close();
-                }
-                catch (Exception e) {
-                    throw e;
-                }
+            EBook eBook = eBookMapper.selectOne(new QueryWrapper<EBook>().lambda().eq(EBook::getEbookName, name));
+            String fileName = eBook.getEbookName();
+            DownloadByteArray callback = new DownloadByteArray();
+            byte[] b = fastFileStorageClient.downloadFile(eBook.getFileGroup(), eBook.getFileUrl(), callback);
+            httpServletResponse.reset();
+            httpServletResponse.setContentType("application/x-download");
+            httpServletResponse.addHeader("Content-Disposition", "attachment;filename=\"" + fileName+".pdf" + "\"");
+            httpServletResponse.getOutputStream().write(b);
+            httpServletResponse.getOutputStream().close();
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
 //    @Override

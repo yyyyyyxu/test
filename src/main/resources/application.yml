@@ -22,9 +22,9 @@ spring:
     # 编码集
     default-encoding: UTF-8
     #发送邮件的账户
-    username: Yx_990509@163.com
+    username: yx_1999119119@163.com
     #授权码
-    password: HVPUSAVYMIRMCODZ
+    password: GAKFLAPJPVLJSIFP
     test-connection: true
     properties:
       mail:
@@ -37,7 +37,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     name: defaultDataSource # 数据源名称
-    url: jdbc:mysql://localhost:3306/bookmanage?serverTimezone=Asia/Shanghai # 数据库连接地址
+    url: jdbc:mysql://localhost:3306/bookmanage?serverTimezone=Asia/Shanghai&useUnicode=yes&characterEncoding=utf8 # 数据库连接地址
     username: root # 数据库用户名&密码：
     password: 123456
 
@@ -69,7 +69,7 @@ pagehelper:
 fdfs:
   connect-timeout: 30  # 连接的超时时间
   so-timeout: 1500  # 读取的超时时间
-  tracker-list: 192.168.114.130:22122  #tracker服务所在的ip地址和端口号
+  tracker-list: 192.168.140.129:22122  #tracker服务所在的ip地址和端口号
 
 
 

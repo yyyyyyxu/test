@@ -27,6 +27,6 @@ public class HadToBorrowBooksServiceImp extends ServiceImpl<BaseMapper<Book>,Boo
      */
     @Override
     public List<Book> list(User user) {
-        return bookMapper.selectList(new QueryWrapper<Book>().lambda().eq(Book::getUserId,user.getUserId()));
+        return bookMapper.selectList(new QueryWrapper<Book>().lambda().eq(Book::getUserName,user.getUserName()));
     }
 }

@@ -6,12 +6,13 @@
         <result column="ID" jdbcType="VARCHAR" property="id" />
         <result column="book_code" jdbcType="VARCHAR" property="bookCode"/>
         <result column="book_name" jdbcType="VARCHAR" property="bookName"/>
-        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
         <result column="flag" jdbcType="VARCHAR" property="flag"/>
         <result column="book_detail" jdbcType="VARCHAR" property="bookDetail"/>
         <result column="creat_time" jdbcType="VARCHAR" property="creatTime"/>
         <result column="update_time" jdbcType="VARCHAR" property="updateTime"/>
         <result column="expiration_Time" jdbcType="VARCHAR" property="expirationTime"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
     </resultMap>
 
     <resultMap id="ExpireyUserRemindResultMap" type="com.yanxu.book.entity.ExpireyUserRemind">
@@ -25,23 +26,22 @@
         SELECT
         u.email,b.book_name,b.expiration_Time
         FROM
-        ( book b INNER JOIN USER u ON b.user_id = u.user_id)
+        ( book b INNER JOIN USER u ON b.user_name = u.user_name)
         WHERE
-        #{date}<=b.expiration_Time
+        #{date}>=b.expiration_Time
         AND
-        #{nowDate}>b.expiration_Time
+        #{nowDate}<b.expiration_Time
         ]]>
     </select>
 
     <select id="getOverdueUser" resultMap="ExpireyUserRemindResultMap" parameterType="string" >
         <![CDATA[
         SELECT
-        u.email,b.book_name,u.user_id,u.overdue_time
+        u.email,b.book_name,u.user_name,u.overdue_time,b.expiration_Time
         FROM
-        ( book b INNER JOIN USER u ON b.user_id = u.user_id)
+        ( book b INNER JOIN USER u ON b.user_name = u.user_name)
         WHERE
         #{date}>=b.expiration_Time
         ]]>
     </select>
-
 </mapper>

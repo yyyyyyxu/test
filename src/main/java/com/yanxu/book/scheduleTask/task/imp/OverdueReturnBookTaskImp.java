@@ -1,5 +1,6 @@
 package com.yanxu.book.scheduleTask.task.imp;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.yanxu.book.config.SpringContextUtil;
 import com.yanxu.book.entity.Email;
@@ -12,6 +13,7 @@ import com.yanxu.book.mapper.UserMapper;
 import com.yanxu.book.scheduleTask.task.Task;
 import com.yanxu.book.util.DateFormatUtil;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.mail.MailException;
@@ -24,6 +26,7 @@ import java.util.List;
 
 @Data
 @Component
+@Slf4j
 public class OverdueReturnBookTaskImp implements Task {
 
     @Autowired
@@ -59,6 +62,7 @@ public class OverdueReturnBookTaskImp implements Task {
 
     @Override
     public void run() {
+        log.info("OverdueReturnBookTask start");
         AbstractApplicationContext ac = (AbstractApplicationContext) SpringContextUtil.getApplicationContext();
         BookMapper bookMapper = ac.getBean(BookMapper.class);
         Email email = ac.getBean(Email.class);
@@ -71,23 +75,16 @@ public class OverdueReturnBookTaskImp implements Task {
 
 
             try {
-
-                User user=new User();
-                user.setOverdueTime(x.getOverdueTime()+1);
-                userMapper.update(user,new UpdateWrapper<User>().lambda().eq(User::getUserId,x.getUserId()));
-
-
-
+                User user = userMapper.selectOne(new QueryWrapper<User>().lambda().eq(User::getUserName, x.getUserName()));
+                user.setOverdueTime(x.getOverdueTime() + 1);
+                userMapper.update(user, new UpdateWrapper<User>().lambda().eq(User::getUserName, x.getUserName()));
                 String returnDate = DateFormatUtil.LongStringFormat(x.getExpirationTime());
                 ToEmail toEmail = new ToEmail();
                 String[] getEmail = new String[1];
                 getEmail[0] = x.getEmail();
-
                 toEmail.setTos(getEmail);
                 toEmail.setSubject("您有逾期归还的图书请尽快归还");
                 toEmail.setContent("图书名：" + x.getBookName() + "归还时间：" + returnDate);
-
-
                 SimpleMailMessage message = new SimpleMailMessage();
                 //谁发的
                 message.setFrom(email.getFrom());

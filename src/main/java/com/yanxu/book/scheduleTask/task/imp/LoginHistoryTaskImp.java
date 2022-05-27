@@ -1,8 +1,10 @@
 package com.yanxu.book.scheduleTask.task.imp;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yanxu.book.config.SpringContextUtil;
 import com.yanxu.book.entity.Setting;
 import com.yanxu.book.entity.UserLoginHistory;
+import com.yanxu.book.mapper.BookBorrowHistoryMapper;
 import com.yanxu.book.mapper.SettingMapper;
 import com.yanxu.book.mapper.UserLoginHistoryMapper;
 import com.yanxu.book.service.UserLoginHistoryService;
@@ -11,7 +13,9 @@ import com.yanxu.book.mapper.UserMapper;
 import com.yanxu.book.scheduleTask.task.Task;
 import com.yanxu.book.util.DateFormatUtil;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +28,7 @@ import java.util.stream.Collectors;
 
 @Data
 @Component
+@Slf4j
 public class LoginHistoryTaskImp implements Task {
 
     @Autowired
@@ -55,16 +60,21 @@ public class LoginHistoryTaskImp implements Task {
 
     @Override
     public void run() {
+        log.info("LoginHistoryTask start");
+        AbstractApplicationContext ac = (AbstractApplicationContext) SpringContextUtil.getApplicationContext();
+        SettingMapper settingMapper = ac.getBean(SettingMapper.class);
         Setting setting=settingMapper.selectOne(new QueryWrapper<Setting>().lambda().eq(Setting::getParameterCode,ParameterCodeEnum.LOGININ_HISTORY_TASK_RETAIN.getParameterCode()).
                 eq(Setting::getParameterName,ParameterCodeEnum.LOGININ_HISTORY_TASK_RETAIN.getParameterName()));
-
+        UserLoginHistoryMapper userLoginHistoryMapper = ac.getBean(UserLoginHistoryMapper.class);
         Date date=new Date();
         String nowFormat=DateFormatUtil.LongStringFormat(date);
         Calendar calendar=Calendar.getInstance();
         calendar.add(Calendar.DATE,-Integer.valueOf(setting.getParameterValue()));
         List<UserLoginHistory> userLoginHistories=userLoginHistoryMapper.selectList(new QueryWrapper<UserLoginHistory>().lambda().le(UserLoginHistory::getCreatTime,calendar.getTime()));
         List<Integer> id=userLoginHistories.stream().map(x-> Integer.valueOf(x.getID())).collect(Collectors.toList());
-        userLoginHistoryService.removeByIds(id);
+        if (!id.isEmpty()){
+            userLoginHistoryMapper.deleteBatchIds(id);
+        }
 
     }
 

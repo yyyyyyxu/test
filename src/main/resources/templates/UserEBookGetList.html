@@ -12,44 +12,27 @@
     <div id="list">
         <ul>
             <li>
-                <a th:href="@{/getBookBorrowHistory/allHistory}">
-                    <div>借阅记录查询</div>
+                <a th:href="@{/getBookBorrowHistory/selfHistory}">
+                    <div>个人借阅记录查询</div>
                 </a>
             </li>
             <li>
-                <a th:href="@{/book/managerGetBorrowedBook}">
+                <a th:href="@{/book/userGetBorrowedBook}">
                     <div>个人已借阅书籍查询</div>
                 </a>
             </li>
             <li>
-                <a th:href="@{/book/managerGetBookList}">
+                <a th:href="@{/book/userGetBookList}">
                     <div>图书资源列表</div>
                 </a>
             </li>
             <li>
-                <a th:href="@{/book/insertBooks}">
-                    <div>插入新的图书</div>
-                </a>
-            </li>
-        </ul>
-        <ul>
-            <li>
-                <a th:href="@{/ebook/ebookUpload}">
-                    <div>上传电子书</div>
-                </a>
-            </li>
-            <li>
-                <a th:href="@{/ebook/getEbook}">
+                <a th:href="@{/ebook/UserGetEbook}">
                     <div>下载电子书</div>
                 </a>
             </li>
             <li>
-                <a th:href="@{/manager/setting}">
-                    <div>系统设置</div>
-                </a>
-            </li>
-            <li>
-                <a th:href="@{/password/toUpdate}">
+                <a th:href="@{/password/toUserUpdate}">
                     <div>修改密码</div>
                 </a>
             </li>

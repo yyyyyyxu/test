@@ -48,6 +48,11 @@
                 </a>
             </li>
             <li>
+                <a th:href="@{/password/toUpdate}">
+                    <div>修改密码</div>
+                </a>
+            </li>
+            <li>
                 <a th:href="@{/book/logout}">
                     <div>退出</div>
                 </a>
@@ -59,6 +64,12 @@
 
 
         <table border="1">
+            <form method="get" th:action="@{/book/managerGetBookList}">
+                图书编码:
+                <input type="text" name="bookCode"/> 图书名称:
+                <input type="text" name="bookName"/>
+                <button type="submit" class="button">查询</button>
+            </form>
             <thead>
                 <tr>
                     <th>图书编码</th>
@@ -84,7 +95,7 @@
                 </tr>
                 <td colspan="9">
                     共<span th:text="${page.pages}" />页，<span th:text="${page.total }" />条记录
-                    <a th:href="@{/book/getBookList?(num=1)}">首页</a>
+                    <a th:href="@{/book/managerGetBookList?(num=1)}">首页</a>
                     <a th:if="${page.pageNum}!=1" th:href="@{/book/managerGetBookList?(num=${page.pageNum}-1)}">上一页</a>
                     <a th:if="${page.pageNum}==1" th:href="@{/book/managerGetBookList?num=1}">上一页</a>
                     <a th:if="${page.pageNum}!=${page.pages}"

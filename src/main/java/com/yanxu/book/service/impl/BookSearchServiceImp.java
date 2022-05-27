@@ -37,7 +37,7 @@ public class BookSearchServiceImp extends ServiceImpl<BaseMapper<Book>, Book> im
         for (Book book1 : allBook) {
             if (book1.getImage() != null) {
                 try {
-                    bufferedOutputStream = new BufferedOutputStream(new FileOutputStream("..\\book\\src\\main\\resources\\static\\bookpic\\" + book1.getBookCode() + ".png"));
+                    bufferedOutputStream = new BufferedOutputStream(new FileOutputStream("src/main/resources/static/bookpic/" + book1.getBookCode() + ".png"));
                     bufferedOutputStream.write(book1.getImage());
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();

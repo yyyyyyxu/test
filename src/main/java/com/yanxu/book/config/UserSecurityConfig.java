@@ -53,7 +53,8 @@ public class UserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/user/login","user/loginFailure").permitAll()
                 .anyRequest().authenticated()
                 .and().rememberMe().tokenRepository(presistentTokenRepository())
-                .tokenValiditySeconds(60 * 60)
+                .userDetailsService(userLoginService)
+                .tokenValiditySeconds(120)
                 .and()
                 .apply(new JsonLoginConfigurer<>()).loginSuccessHandler(new JsonLoginSuccessHandler())
                 .and().csrf().disable();

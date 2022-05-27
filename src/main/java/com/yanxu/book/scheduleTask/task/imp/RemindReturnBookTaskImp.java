@@ -12,6 +12,7 @@ import com.yanxu.book.scheduleTask.task.Task;
 import com.yanxu.book.settingEnum.ParameterCodeEnum;
 import com.yanxu.book.util.DateFormatUtil;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.mail.MailException;
@@ -25,6 +26,7 @@ import java.util.List;
 
 @Data
 @Component
+@Slf4j
 public class RemindReturnBookTaskImp implements Task {
 
     @Autowired
@@ -57,7 +59,7 @@ public class RemindReturnBookTaskImp implements Task {
 
     @Override
     public void run() {
-
+        log.info("RemindReturnBookTask start");
         AbstractApplicationContext ac = (AbstractApplicationContext) SpringContextUtil.getApplicationContext();
         SettingMapper settingMapper = ac.getBean(SettingMapper.class);
         BookMapper bookMapper = ac.getBean(BookMapper.class);
@@ -69,7 +71,7 @@ public class RemindReturnBookTaskImp implements Task {
         Calendar calendar = Calendar.getInstance();
 
         calendar.setTime(new Date());
-        calendar.add(Calendar.DATE, -daysInAdvance);
+        calendar.add(Calendar.DATE, daysInAdvance);
         String deadLine = DateFormatUtil.LongStringFormat(calendar.getTime());
 
         List<ExpireyUserRemind> expireyUserRemindList = bookMapper.getExpireyUser(deadLine, DateFormatUtil.LongStringFormat(new Date()));
